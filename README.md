@@ -11,22 +11,14 @@
   ---
   
   ## 📊 GitHub Statistics
-  
-  <table>
-    <tr>
-      <td>
-        <img src="https://denvercoder1-github-readme-stats.vercel.app/api?username=luhnox&show_icons=true&count_private=true&theme=react&border_color=7F3FBF&bg_color=0D1117&title_color=F85D7F&icon_color=F8D866" height="192px" width="49.5%" alt="Luhnox's GitHub Stats" />
-      </td>
-      <td>
-        <img src="https://denvercoder1-github-readme-stats.vercel.app/api/top-langs/?username=luhnox&langs_count=8&layout=compact&theme=react&border_color=7F3FBF&bg_color=0D1117&title_color=F85D7F&icon_color=F8D866" height="192px" width="49.5%" alt="Top Languages" />
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2">
-        <img src="https://github-readme-streak-stats.herokuapp.com/?user=luhnox&theme=radical&hide_border=true" alt="GitHub Streak" />
-      </td>
-    </tr>
-  </table>
+
+  <p align="center">
+    <img src="https://denvercoder1-github-readme-stats.vercel.app/api?username=luhnox&show_icons=true&count_private=true&theme=react&border_color=7F3FBF&bg_color=0D1117&title_color=F85D7F&icon_color=F8D866" height="192px" width="49.5%" alt="Luhnox's GitHub Stats" />
+    <img src="https://denvercoder1-github-readme-stats.vercel.app/api/top-langs/?username=luhnox&langs_count=8&layout=compact&theme=react&border_color=7F3FBF&bg_color=0D1117&title_color=F85D7F&icon_color=F8D866" height="192px" width="49.5%" alt="Top Languages" />
+  </p>
+  <p align="center">
+    <img src="https://github-readme-streak-stats.herokuapp.com/?user=luhnox&theme=radical&hide_border=true" alt="GitHub Streak" />
+  </p>
   
   ---
   
