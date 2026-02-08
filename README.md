@@ -48,12 +48,8 @@
   
   <div align="center">
     
-  <a href="https://github.com/luhnox/Bot-Joki-Aris">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=luhnox&repo=Bot-Joki-Aris&theme=radical&hide_border=true" alt="Bot-Joki-Aris" />
-  </a>
-  
-  <a href="https://github.com/luhnox/luhnox">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=luhnox&repo=luhnox&theme=radical&hide_border=true" alt="luhnox Profile" />
+  <a href="https://github.com/luhnox/Discord-Self-Bot-Voice">
+    <img src="https://github-readme-stats.vercel.app/api/pin/?username=luhnox&repo=Discord-Self-Bot-Voice&theme=radical&hide_border=true" alt="Discord-Self-Bot-Voice" />
   </a>
   
   <!-- Tambahkan repo lain jika ada -->
