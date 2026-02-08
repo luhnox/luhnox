@@ -13,25 +13,22 @@
   ## 📊 GitHub Statistics
 
   <p align="center">
-    <img src="https://github-readme-stats.vercel.app/api?username=luhnox&show_icons=true&count_private=true&theme=tokyonight&line_height=27&hide_border=true&title_color=FF6B9D&text_color=c9cacc" height="180px" alt="Luhnox's GitHub Stats" />
+    <img src="https://github-readme-stats-git-main-anuragbishnois-projects.vercel.app/api?username=luhnox&show_icons=true&count_private=true&theme=tokyonight&line_height=27&hide_border=true&title_color=FF6B9D&text_color=c9cacc" height="180px" alt="Luhnox's GitHub Stats" />
   </p>
 
   <p align="center">
-    <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=luhnox&layout=compact&theme=tokyonight&hide_border=true&title_color=FF6B9D&text_color=c9cacc" height="180px" alt="Top Languages" />
+    <img src="https://github-readme-stats-git-main-anuragbishnois-projects.vercel.app/api/top-langs/?username=luhnox&layout=compact&theme=tokyonight&hide_border=true&title_color=FF6B9D&text_color=c9cacc&langs_count=10" height="180px" alt="Top Languages" />
   </p>
 
   <p align="center">
-    <img src="https://streak-stats.demolab.com?user=luhnox&theme=tokyonight&hide_border=true&date_format=j%20M%5B%20Y%5D" alt="GitHub Streak" />
+    <img src="https://github-readme-streak-stats.herokuapp.com?user=luhnox&theme=tokyonight&hide_border=true" alt="GitHub Streak" />
   </p>
   
   ---
   
   ## 🐍 Contribution Snake
   
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/luhnox/luhnox/output/github-contribution-grid-snake-dark.svg">
-    <img alt="github contribution grid snake animation" src="https://raw.githubusercontent.com/luhnox/luhnox/output/github-contribution-grid-snake.svg">
-  </picture>
+  ![Snake animation](https://raw.githubusercontent.com/luhnox/luhnox/output/github-contribution-grid-snake.svg)
   
   ---
   
