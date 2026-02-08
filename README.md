@@ -13,31 +13,8 @@
   ## 📊 GitHub Statistics
 
   <p align="center">
-    <a href="https://github.com/luhnox">
-      <img src="https://readme-stats.vercel.app/api?username=luhnox&show_icons=true&count_private=true&theme=tokyonight&hide_border=true" height="200px" alt="Luhnox's GitHub Stats" />
-    </a>
-  </p>
-
-  <p align="center">
-    <a href="https://github.com/luhnox">
-      <img src="https://readme-stats.vercel.app/api/top-langs/?username=luhnox&layout=compact&theme=tokyonight&hide_border=true" height="200px" alt="Top Languages" />
-    </a>
-  </p>
-
-  <p align="center">
     <img src="https://github-readme-streak-stats.herokuapp.com?user=luhnox&theme=tokyonight&hide_border=true" alt="GitHub Streak" />
   </p>
-  
-  ---
-  
-  ## 🐍 Contribution Snake
-  
-  <a href="https://github.com/luhnox">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/luhnox/luhnox/output/github-contribution-grid-snake-dark.svg" />
-      <img alt="github-contribution-grid-snake" src="https://raw.githubusercontent.com/luhnox/luhnox/output/github-contribution-grid-snake.svg" />
-    </picture>
-  </a>
   
   ---
   
