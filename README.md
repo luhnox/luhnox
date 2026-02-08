@@ -30,36 +30,9 @@
   
   ---
   
-  ## 🏆 GitHub Trophies
-  
-  <div align="center">
-    <img src="https://github-profile-trophy.vercel.app/?username=luhnox&theme=radical&no-frame=true&no-bg=true&margin-w=15&margin-h=15&column=7" alt="GitHub Trophies" />
-  </div>
-  
-  ---
-  
   ## 🐍 Contribution Snake
   
   ![Snake animation](https://raw.githubusercontent.com/luhnox/luhnox/output/github-contribution-grid-snake.svg)
-  
-  ---
-  
-  ## 📌 Pinned Repositories
-  
-  <div align="center">
-    
-  <a href="https://github.com/luhnox/Discord-Self-Bot-Voice">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=luhnox&repo=Discord-Self-Bot-Voice&theme=radical&hide_border=true" alt="Discord-Self-Bot-Voice" />
-  </a>
-  
-  <!-- Tambahkan repo lain jika ada -->
-  <!--
-  <a href="https://github.com/luhnox/your-repo">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=luhnox&repo=your-repo&theme=radical&hide_border=true" alt="Your Repo" />
-  </a>
-  -->
-    
-  </div>
   
   ---
   
