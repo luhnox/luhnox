@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { Mail, MapPin, Phone, Send, Github, Instagram, Music2 } from 'lucide-react';
 
 const Contact = () => {
+  const formEndpoint = import.meta.env.VITE_FORMSPREE_ENDPOINT as string | undefined;
+  const isEmailBackendConfigured = Boolean(formEndpoint);
   const [isVisible, setIsVisible] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -41,14 +43,36 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      if (isEmailBackendConfigured && formEndpoint) {
+        const response = await fetch(formEndpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
 
-    setIsSubmitting(false);
-    setSubmitStatus('success');
-    setFormData({ name: '', email: '', subject: '', message: '' });
+        if (!response.ok) {
+          throw new Error('Failed to send form');
+        }
+      } else {
+        const subject = encodeURIComponent(`[Portfolio] ${formData.subject}`);
+        const body = encodeURIComponent(
+          `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+        );
+        window.location.href = `mailto:luhnoxq@gmail.com?subject=${subject}&body=${body}`;
+      }
 
-    setTimeout(() => setSubmitStatus('idle'), 5000);
+      setSubmitStatus('success');
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch {
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+      setTimeout(() => setSubmitStatus('idle'), 5000);
+    }
   };
 
   const contactInfo = [
@@ -270,7 +294,9 @@ const Contact = () => {
               {/* Status Messages */}
               {submitStatus === 'success' && (
                 <div className="mt-4 p-4 bg-green-500/20 border border-green-500/30 rounded-xl text-green-400 text-center">
-                  Thank you! Your message has been sent successfully. I'll get back to you soon.
+                  {isEmailBackendConfigured
+                    ? "Thank you! Your message has been sent successfully. I'll get back to you soon."
+                    : 'Draft email sudah dibuka di aplikasi email Anda. Silakan klik Send untuk mengirim.'}
                 </div>
               )}
               {submitStatus === 'error' && (
