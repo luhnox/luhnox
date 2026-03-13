@@ -198,7 +198,7 @@ const Skills = () => {
           }`}
           style={{ transitionDelay: '0.8s' }}
         >
-          {['Git', 'MySQL', 'MongoDB', 'REST API', 'GraphQL', 'Docker', 'Linux', 'Figma', 'VS Code'].map(
+          {['Git', 'MySQL', 'MongoDB', 'REST API', 'VS Code'].map(
             (tag) => (
               <span
                 key={tag}
