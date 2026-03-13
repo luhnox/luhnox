@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Mail, MapPin, Phone, Send, Github, Linkedin, Twitter, Instagram } from 'lucide-react';
+import { Mail, MapPin, Phone, Send, Github, Instagram, Music2 } from 'lucide-react';
 
 const Contact = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -55,14 +55,14 @@ const Contact = () => {
     {
       icon: <Mail size={24} />,
       label: 'Email',
-      value: 'luhnox@example.com',
-      href: 'mailto:luhnox@example.com',
+      value: 'luhnoxq@gmail.com',
+      href: 'mailto:luhnoxq@gmail.com',
     },
     {
       icon: <Phone size={24} />,
       label: 'Phone',
-      value: '+62 812-3456-7890',
-      href: 'tel:+6281234567890',
+      value: '+62 896-2967-1669',
+      href: 'tel:+6289629671669',
     },
     {
       icon: <MapPin size={24} />,
@@ -74,9 +74,8 @@ const Contact = () => {
 
   const socialLinks = [
     { icon: <Github size={20} />, href: 'https://github.com/luhnox', label: 'GitHub' },
-    { icon: <Linkedin size={20} />, href: '#', label: 'LinkedIn' },
-    { icon: <Twitter size={20} />, href: '#', label: 'Twitter' },
-    { icon: <Instagram size={20} />, href: '#', label: 'Instagram' },
+    { icon: <Instagram size={20} />, href: 'https://www.instagram.com/luhnox_/', label: 'Instagram' },
+    { icon: <Music2 size={20} />, href: 'https://www.tiktok.com/@luhnoxq', label: 'TikTok' },
   ];
 
   return (

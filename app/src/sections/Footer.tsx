@@ -1,4 +1,4 @@
-import { Heart, Github, Linkedin, Twitter, Instagram, ArrowUp } from 'lucide-react';
+import { Heart, Github, Instagram, Music2, ArrowUp } from 'lucide-react';
 
 const Footer = () => {
   const scrollToTop = () => {
@@ -19,9 +19,8 @@ const Footer = () => {
 
   const socialLinks = [
     { icon: <Github size={18} />, href: 'https://github.com/luhnox', label: 'GitHub' },
-    { icon: <Linkedin size={18} />, href: '#', label: 'LinkedIn' },
-    { icon: <Twitter size={18} />, href: '#', label: 'Twitter' },
-    { icon: <Instagram size={18} />, href: '#', label: 'Instagram' },
+    { icon: <Instagram size={18} />, href: 'https://www.instagram.com/luhnox_/', label: 'Instagram' },
+    { icon: <Music2 size={18} />, href: 'https://www.tiktok.com/@luhnoxq', label: 'TikTok' },
   ];
 
   const scrollToSection = (href: string) => {
@@ -41,7 +40,7 @@ const Footer = () => {
           {/* Brand */}
           <div className="md:col-span-2">
             <a href="#home" className="inline-block text-3xl font-bold gradient-text mb-4">
-              Luhnox
+              luhnox
             </a>
             <p className="text-gray-400 mb-6 max-w-md">
               Full Stack Developer & UI Designer crafting digital experiences that blend 
@@ -91,18 +90,18 @@ const Footer = () => {
             <ul className="space-y-3 text-gray-400">
               <li>
                 <a
-                  href="mailto:luhnox@example.com"
+                  href="mailto:luhnoxq@gmail.com"
                   className="hover:text-purple transition-colors duration-300"
                 >
-                  luhnox@example.com
+                  luhnoxq@gmail.com
                 </a>
               </li>
               <li>
                 <a
-                  href="tel:+6281234567890"
+                  href="tel:+6289629671669"
                   className="hover:text-purple transition-colors duration-300"
                 >
-                  +62 812-3456-7890
+                  +62 896-2967-1669
                 </a>
               </li>
               <li>Banjarmasin, Indonesia</li>
@@ -113,7 +112,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-gray-500 text-sm text-center md:text-left">
-            &copy; {currentYear} Luhnox. All rights reserved. Made with{' '}
+            &copy; {currentYear} luhnox. All rights reserved. Made with{' '}
             <Heart size={14} className="inline text-red-500 fill-red-500" /> in Banjarmasin.
           </p>
 

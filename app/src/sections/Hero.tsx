@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowDown, Github, Linkedin, Mail } from 'lucide-react';
+import { ArrowDown, Github, Instagram, Mail, Music2 } from 'lucide-react';
 
 const Hero = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -78,7 +78,7 @@ const Hero = () => {
               }`}
               style={{ transitionDelay: '0.3s' }}
             >
-              <span className="gradient-text">Luhnox</span>
+              <span className="gradient-text">luhnox</span>
             </h1>
 
             {/* Role */}
@@ -146,14 +146,25 @@ const Hero = () => {
                 <Github size={22} />
               </a>
               <a
-                href="#"
+                href="https://www.instagram.com/luhnox_/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="p-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition-all duration-300"
-                aria-label="LinkedIn"
+                aria-label="Instagram"
               >
-                <Linkedin size={22} />
+                <Instagram size={22} />
               </a>
               <a
-                href="mailto:luhnox@example.com"
+                href="https://www.tiktok.com/@luhnoxq"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition-all duration-300"
+                aria-label="TikTok"
+              >
+                <Music2 size={22} />
+              </a>
+              <a
+                href="mailto:luhnoxq@gmail.com"
                 className="p-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition-all duration-300"
                 aria-label="Email"
               >
@@ -181,7 +192,7 @@ const Hero = () => {
               <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-purple/30 animate-pulse-glow">
                 <img
                   src="/hero-profile.jpg"
-                  alt="Luhnox Profile"
+                  alt="luhnox Profile"
                   className="w-full h-full object-cover"
                 />
               </div>

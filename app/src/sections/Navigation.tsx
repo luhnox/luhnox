@@ -52,7 +52,7 @@ const Navigation = ({ scrollY }: NavigationProps) => {
             }}
             className="px-4 py-2 font-bold text-lg gradient-text"
           >
-            Luhnox
+            luhnox
           </a>
 
           {/* Desktop Links */}
@@ -142,7 +142,7 @@ const Navigation = ({ scrollY }: NavigationProps) => {
       >
         <div className="w-full px-6 py-6 flex items-center justify-between">
           <a href="#home" className="font-bold text-2xl gradient-text">
-            Luhnox
+            luhnox
           </a>
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (

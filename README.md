@@ -1,6 +1,6 @@
 <div align="center">
   
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=200&section=header&text=Luhnox&fontSize=80&fontAlignY=35&animation=twinkling" />
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=200&section=header&text=luhnox&fontSize=80&fontAlignY=35&animation=twinkling" />
 
   ### 🚀 Passionate Developer & Open Source Enthusiast
   

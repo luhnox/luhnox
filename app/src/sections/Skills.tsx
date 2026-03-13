@@ -31,13 +31,13 @@ const Skills = () => {
 
   const skills: Skill[] = [
     { name: 'JavaScript', level: 70, color: '#F7DF1E', icon: 'JS' },
-    { name: 'TypeScript', level: 65, color: '#3178C6', icon: 'TS' },
-    { name: 'React', level: 50, color: '#61DAFB', icon: 'Re' },
-    { name: 'Node.js', level: 57, color: '#339933', icon: 'No' },
+    { name: 'TypeScript', level: 56, color: '#3178C6', icon: 'TS' },
+    { name: 'React', level: 38, color: '#61DAFB', icon: 'Re' },
+    { name: 'Node.js', level: 49, color: '#339933', icon: 'No' },
     { name: 'Python', level: 40, color: '#3776AB', icon: 'Py' },
-    { name: 'PHP', level: 45, color: '#777BB4', icon: 'Ph' },
+    { name: 'PHP', level: 25, color: '#777BB4', icon: 'Ph' },
     { name: 'Lua', level: 50, color: '#000080', icon: 'Lu' },
-    { name: 'Java', level: 60, color: '#007396', icon: 'Ja' },
+    { name: 'Java', level: 33, color: '#007396', icon: 'Ja' },
     { name: 'HTML/CSS', level: 85, color: '#E34F26', icon: 'HC' },
   ];
 
