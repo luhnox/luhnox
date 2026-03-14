@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Mail, MapPin, Phone, Send, Github, Instagram, Music2, linkedin } from 'lucide-react';
+import { Mail, MapPin, Phone, Send, Github, Instagram, Music2, Linkedin } from 'lucide-react';
 
 const Contact = () => {
   const formEndpoint = import.meta.env.VITE_FORMSPREE_ENDPOINT as string | undefined;
@@ -100,7 +100,7 @@ const Contact = () => {
     { icon: <Github size={20} />, href: 'https://github.com/luhnox', label: 'GitHub' },
     { icon: <Instagram size={20} />, href: 'https://www.instagram.com/luhnox_/', label: 'Instagram' },
     { icon: <Music2 size={20} />, href: 'https://www.tiktok.com/@luhnoxq', label: 'TikTok' },
-    { icon: <linkedin size={20} />, href: 'https://www.linkedin.com/in/muhammad-fery-iskandar-147a25266/', label: 'LinkedIn' },
+    { icon: <Linkedin size={20} />, href: 'https://www.linkedin.com/in/muhammad-fery-iskandar-147a25266/', label: 'LinkedIn' },
   ];
 
   return (
