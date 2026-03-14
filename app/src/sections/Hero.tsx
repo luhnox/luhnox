@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowDown, Github, Instagram, Mail, Music2 } from 'lucide-react';
+import { ArrowDown, Github, Instagram, Mail, Music2, Linkedin } from 'lucide-react';
 
 const Hero = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -169,6 +169,15 @@ const Hero = () => {
                 aria-label="Email"
               >
                 <Mail size={22} />
+              </a>
+              <a
+                href="https://www.linkedin.com/in/muhammad-fery-iskandar-147a25266/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition-all duration-300"
+                aria-label="LinkedIn"
+              >
+                <Linkedin size={22} />
               </a>
             </div>
           </div>

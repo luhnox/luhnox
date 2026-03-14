@@ -1,4 +1,4 @@
-import { Heart, Github, Instagram, Music2, ArrowUp } from 'lucide-react';
+import { Heart, Github, Instagram, Music2, ArrowUp, Linkedin } from 'lucide-react';
 
 const Footer = () => {
   const scrollToTop = () => {
@@ -21,6 +21,7 @@ const Footer = () => {
     { icon: <Github size={18} />, href: 'https://github.com/luhnox', label: 'GitHub' },
     { icon: <Instagram size={18} />, href: 'https://www.instagram.com/luhnox_/', label: 'Instagram' },
     { icon: <Music2 size={18} />, href: 'https://www.tiktok.com/@luhnoxq', label: 'TikTok' },
+    { icon: <Linkedin size={20} />, href: 'https://www.linkedin.com/in/muhammad-fery-iskandar-147a25266/', label: 'LinkedIn' },
   ];
 
   const scrollToSection = (href: string) => {
