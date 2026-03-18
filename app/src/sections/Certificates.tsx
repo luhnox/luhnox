@@ -199,9 +199,6 @@ const Certificates = () => {
                           <p className="text-sm text-gray-300 leading-relaxed max-w-md mb-2">
                             {cert.description}
                           </p>
-                          <p className="text-xs uppercase tracking-wider text-gray-400">
-                            Tap or click to enlarge
-                          </p>
                         </>
                       )}
                     </div>
@@ -211,60 +208,40 @@ const Certificates = () => {
             })}
           </div>
 
-          {/* Mobile and desktop lightbox */}
+          {/* Minimal lightbox */}
           {expandedCertificate && (
             <div
-              className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-black/85 backdrop-blur-sm p-4 md:p-8"
+              className="fixed inset-0 z-[100] flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 md:p-8"
               onClick={() => setExpandedCertificate(null)}
               aria-modal="true"
               role="dialog"
             >
               <div
-                className={`relative rounded-2xl overflow-hidden bg-dark border border-white/10 shadow-2xl flex flex-col max-h-[90vh] md:max-h-[85vh] ${
+                className={`relative rounded-xl overflow-hidden shadow-2xl border border-white/10 bg-black/30 ${
                   expandedCertificate.type === 'portrait'
-                    ? 'w-[84vw] max-w-[460px]'
-                    : 'w-[94vw] max-w-[980px]'
+                    ? 'max-w-[430px] w-[88vw]'
+                    : 'max-w-[1100px] w-[95vw]'
                 }`}
                 onClick={(event) => event.stopPropagation()}
               >
                 <button
                   onClick={() => setExpandedCertificate(null)}
-                  className="absolute top-4 right-4 z-10 p-2 rounded-full bg-dark/80 hover:bg-dark border border-white/10 text-white hover:border-purple/50 transition-all"
+                  className="absolute top-3 right-3 z-20 p-2 rounded-full bg-black/55 hover:bg-black/75 text-white transition-colors"
                   aria-label="Close certificate preview"
                 >
-                  <X size={24} />
+                  <X size={20} />
                 </button>
 
-                {/* Image Section */}
-                <div className="flex-shrink-0 overflow-y-auto flex items-center justify-center bg-gradient-to-b from-gray-950 to-dark p-3 md:p-4 max-h-[56vh] md:max-h-[60vh]">
+                <div className="flex items-center justify-center bg-black/20 p-2 md:p-3">
                   <img
                     src={expandedCertificate.image}
                     alt={expandedCertificate.title}
                     className={`${
                       expandedCertificate.type === 'portrait'
-                        ? 'block w-full max-w-[380px] h-auto max-h-[56vh] object-contain'
-                        : 'block w-full max-w-[900px] h-auto max-h-[58vh] object-contain'
+                        ? 'max-h-[86vh] w-auto object-contain'
+                        : 'max-h-[86vh] w-full object-contain'
                     }`}
                   />
-                </div>
-
-                {/* Content Section */}
-                <div className="flex-1 overflow-y-auto p-5 md:p-6 space-y-4 max-h-[34vh] md:max-h-[28vh]">
-                  <div className="flex items-center gap-2">
-                    <Award className="text-purple flex-shrink-0" size={22} />
-                    <span className="text-sm font-medium text-purple">{expandedCertificate.issuer}</span>
-                  </div>
-                  <div>
-                    <h3 className="text-3xl font-bold text-white mb-2">
-                      {expandedCertificate.title}
-                    </h3>
-                    <p className="text-base text-gray-400">{expandedCertificate.date}</p>
-                  </div>
-                  <div className="border-t border-white/10 pt-4">
-                    <p className="text-gray-300 leading-relaxed text-base">
-                      {expandedCertificate.description}
-                    </p>
-                  </div>
                 </div>
               </div>
             </div>
