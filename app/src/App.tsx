@@ -6,9 +6,11 @@ import About from './sections/About';
 import Skills from './sections/Skills';
 import Certificates from './sections/Certificates';
 import Experience from './sections/Experience';
+import GitHubOverview from './sections/GitHubOverview';
 import Projects from './sections/Projects';
 import Footer from './sections/Footer';
 import ParticleBackground from './components/ParticleBackground';
+import CustomCursor from './components/CustomCursor';
 
 function App() {
   const [scrollY, setScrollY] = useState(0);
@@ -27,6 +29,7 @@ function App() {
     <div ref={mainRef} className="relative min-h-screen bg-dark text-white overflow-x-hidden">
       {/* Particle Background */}
       <ParticleBackground />
+      <CustomCursor />
       
       {/* Navigation */}
       <Navigation scrollY={scrollY} />
@@ -38,6 +41,7 @@ function App() {
         <Skills />
         <Certificates />
         <Experience />
+        <GitHubOverview />
         <Projects />
       </main>
       

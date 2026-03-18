@@ -17,8 +17,6 @@ const Certificates = () => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [expandedCertificate, setExpandedCertificate] = useState<Certificate | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
-  const backdropPointerStart = useRef<{ x: number; y: number } | null>(null);
-  const isBackdropPointerMove = useRef(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -216,40 +214,17 @@ const Certificates = () => {
           {/* Mobile and desktop lightbox */}
           {expandedCertificate && (
             <div
-              className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-black/85 backdrop-blur-sm p-4 md:p-8"
-              onPointerDown={(event) => {
-                if (event.target !== event.currentTarget) return;
-                backdropPointerStart.current = { x: event.clientX, y: event.clientY };
-                isBackdropPointerMove.current = false;
-              }}
-              onPointerMove={(event) => {
-                if (!backdropPointerStart.current) return;
-                const deltaX = Math.abs(event.clientX - backdropPointerStart.current.x);
-                const deltaY = Math.abs(event.clientY - backdropPointerStart.current.y);
-
-                if (deltaX > 8 || deltaY > 8) {
-                  isBackdropPointerMove.current = true;
-                }
-              }}
-              onPointerUp={(event) => {
-                if (event.target !== event.currentTarget) return;
-
-                if (!isBackdropPointerMove.current) {
-                  setExpandedCertificate(null);
-                }
-
-                backdropPointerStart.current = null;
-                isBackdropPointerMove.current = false;
-              }}
-              onPointerCancel={() => {
-                backdropPointerStart.current = null;
-                isBackdropPointerMove.current = false;
-              }}
+              className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-black/85 backdrop-blur-sm p-4 md:p-8"
+              onClick={() => setExpandedCertificate(null)}
               aria-modal="true"
               role="dialog"
             >
               <div
-                className="relative w-fit max-w-[95vw] rounded-2xl overflow-y-auto bg-dark border border-white/10 shadow-2xl flex flex-col max-h-[90vh] md:max-h-[85vh]"
+                className={`relative rounded-2xl overflow-hidden bg-dark border border-white/10 shadow-2xl flex flex-col max-h-[90vh] md:max-h-[85vh] ${
+                  expandedCertificate.type === 'portrait'
+                    ? 'w-[84vw] max-w-[460px]'
+                    : 'w-[94vw] max-w-[980px]'
+                }`}
                 onClick={(event) => event.stopPropagation()}
               >
                 <button
@@ -261,20 +236,20 @@ const Certificates = () => {
                 </button>
 
                 {/* Image Section */}
-                <div className="flex-shrink-0 flex items-center justify-center bg-gradient-to-b from-gray-950 to-dark p-4 md:p-6">
+                <div className="flex-shrink-0 overflow-y-auto flex items-center justify-center bg-gradient-to-b from-gray-950 to-dark p-3 md:p-4 max-h-[56vh] md:max-h-[60vh]">
                   <img
                     src={expandedCertificate.image}
                     alt={expandedCertificate.title}
                     className={`${
                       expandedCertificate.type === 'portrait'
-                        ? 'block w-[82vw] max-w-[520px] h-auto max-h-[72vh] object-contain'
-                        : 'block w-[92vw] max-w-[1000px] h-auto max-h-[68vh] object-contain'
+                        ? 'block w-full max-w-[380px] h-auto max-h-[56vh] object-contain'
+                        : 'block w-full max-w-[900px] h-auto max-h-[58vh] object-contain'
                     }`}
                   />
                 </div>
 
                 {/* Content Section */}
-                <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-4">
+                <div className="flex-1 overflow-y-auto p-5 md:p-6 space-y-4 max-h-[34vh] md:max-h-[28vh]">
                   <div className="flex items-center gap-2">
                     <Award className="text-purple flex-shrink-0" size={22} />
                     <span className="text-sm font-medium text-purple">{expandedCertificate.issuer}</span>

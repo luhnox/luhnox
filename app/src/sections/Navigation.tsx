@@ -20,6 +20,7 @@ const Navigation = ({ scrollY }: NavigationProps) => {
     { name: 'Skills', href: '#skills' },
     { name: 'Certificates', href: '#certificates' },
     { name: 'Experience', href: '#experience' },
+    { name: 'Overview', href: '#overview' },
     { name: 'Projects', href: '#projects' },
   ];
 
