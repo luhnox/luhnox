@@ -7,7 +7,6 @@ import Skills from './sections/Skills';
 import Certificates from './sections/Certificates';
 import Experience from './sections/Experience';
 import Projects from './sections/Projects';
-import Contact from './sections/Contact';
 import Footer from './sections/Footer';
 import ParticleBackground from './components/ParticleBackground';
 
@@ -40,7 +39,6 @@ function App() {
         <Certificates />
         <Experience />
         <Projects />
-        <Contact />
       </main>
       
       {/* Footer */}

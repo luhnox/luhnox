@@ -48,27 +48,6 @@ const Experience = () => {
       link: 'https://www.google.com/maps/place/Samsung+Service+Center+Banjarmasin/@-3.3474012,114.6253441,18.83z',
       type: 'internship',
     },
-    {
-      id: 2,
-      company: 'Freelance Developer',
-      position: 'Full Stack Developer',
-      duration: '2020 - Present',
-      location: 'Remote',
-      description:
-        'Working with clients worldwide to deliver custom web applications, e-commerce solutions, and automation tools. Specialized in React, Node.js, and PHP development with a focus on performance and user experience.',
-      type: 'work',
-    },
-    {
-      id: 3,
-      company: 'Open Source Contributor',
-      position: 'Developer',
-      duration: '2019 - Present',
-      location: 'GitHub',
-      description:
-        'Active contributor to various open-source projects. Passionate about giving back to the community and collaborating with developers worldwide to improve tools and libraries.',
-      link: 'https://github.com/luhnox',
-      type: 'work',
-    },
   ];
 
   return (
@@ -180,24 +159,6 @@ const Experience = () => {
               );
             })}
           </div>
-        </div>
-
-        {/* CTA */}
-        <div
-          className={`text-center mt-16 transition-all duration-1000 ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-          }`}
-          style={{ transitionDelay: '0.8s' }}
-        >
-          <a
-            href="https://github.com/luhnox"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-3 glass rounded-full hover:bg-purple/20 transition-all duration-300"
-          >
-            <span>View My GitHub</span>
-            <ExternalLink size={16} />
-          </a>
         </div>
       </div>
     </section>

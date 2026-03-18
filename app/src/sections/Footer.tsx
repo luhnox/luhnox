@@ -14,7 +14,6 @@ const Footer = () => {
     { name: 'Certificates', href: '#certificates' },
     { name: 'Experience', href: '#experience' },
     { name: 'Projects', href: '#projects' },
-    { name: 'Contact', href: '#contact' },
   ];
 
   const socialLinks = [
@@ -114,7 +113,7 @@ const Footer = () => {
         <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-gray-500 text-sm text-center md:text-left">
             &copy; {currentYear} luhnox. All rights reserved. Made with{' '}
-            <Heart size={14} className="inline text-red-500 fill-red-500" /> in Banjarmasin.
+            <Heart size={14} className="inline text-red-500 fill-red-500" />
           </p>
 
           <div className="flex items-center gap-6">

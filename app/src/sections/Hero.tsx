@@ -117,16 +117,6 @@ const Hero = () => {
                 View My Work
                 <ArrowDown size={18} className="group-hover:translate-y-1 transition-transform" />
               </button>
-              <a
-                href="#contact"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="px-8 py-4 border border-white/20 hover:border-purple text-white font-medium rounded-full transition-all duration-300 hover:bg-purple/10 text-center"
-              >
-                Get In Touch
-              </a>
             </div>
 
             {/* Social Links */}

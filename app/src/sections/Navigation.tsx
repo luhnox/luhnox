@@ -21,7 +21,6 @@ const Navigation = ({ scrollY }: NavigationProps) => {
     { name: 'Certificates', href: '#certificates' },
     { name: 'Experience', href: '#experience' },
     { name: 'Projects', href: '#projects' },
-    { name: 'Contact', href: '#contact' },
   ];
 
   const scrollToSection = (href: string) => {
@@ -72,18 +71,6 @@ const Navigation = ({ scrollY }: NavigationProps) => {
             ))}
           </div>
 
-          {/* CTA Button */}
-          <a
-            href="#contact"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection('#contact');
-            }}
-            className="hidden md:block ml-2 px-4 py-2 text-sm font-medium bg-purple hover:bg-purple-dark rounded-full transition-colors duration-300"
-          >
-            Hire Me
-          </a>
-
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
@@ -120,16 +107,6 @@ const Navigation = ({ scrollY }: NavigationProps) => {
                 {link.name}
               </a>
             ))}
-            <a
-              href="#contact"
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection('#contact');
-              }}
-              className="mt-4 px-4 py-3 text-center font-medium bg-purple hover:bg-purple-dark rounded-xl transition-colors duration-300"
-            >
-              Hire Me
-            </a>
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight, Award, ExternalLink } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Award, X } from 'lucide-react';
 
 interface Certificate {
   id: number;
@@ -15,7 +15,10 @@ const Certificates = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [expandedCertificate, setExpandedCertificate] = useState<Certificate | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const backdropPointerStart = useRef<{ x: number; y: number } | null>(null);
+  const isBackdropPointerMove = useRef(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -34,21 +37,37 @@ const Certificates = () => {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setExpandedCertificate(null);
+      }
+    };
+
+    if (expandedCertificate) {
+      window.addEventListener('keydown', handleEscape);
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleEscape);
+    };
+  }, [expandedCertificate]);
+
   const certificates: Certificate[] = [
     {
       id: 1,
       title: 'Certificate of Completion',
       issuer: 'Samsung Tech Institute',
-      date: 'December 2023',
+      date: 'April 2025',
       image: '/certificate-completion.jpg',
       type: 'landscape',
       description: 'Successfully completed the Advanced Software Development program, demonstrating proficiency in modern development practices and industry-standard tools.',
     },
     {
       id: 2,
-      title: 'Certificate of Competence',
+      title: 'SMKN 1 Martapura',
       issuer: 'Samsung Tech Institute',
-      date: 'October 2023',
+      date: 'July 2025',
       image: '/certificate-competence.jpg',
       type: 'portrait',
       description: 'Recognized for technical competence in mobile device hardware repair, software diagnostics, and network connectivity solutions.',
@@ -140,9 +159,19 @@ const Certificates = () => {
                   }}
                 >
                   <div
-                    className={`relative rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 ${
+                    className={`relative rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 cursor-zoom-in ${
                       isActive ? 'shadow-glow-lg' : ''
                     }`}
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => setExpandedCertificate(cert)}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        setExpandedCertificate(cert);
+                      }
+                    }}
+                    aria-label={`Open ${cert.title} image`}
                   >
                     <img
                       src={cert.image}
@@ -168,9 +197,14 @@ const Certificates = () => {
                       </h3>
                       <p className="text-sm text-gray-400 mb-3">{cert.date}</p>
                       {isActive && (
-                        <p className="text-sm text-gray-300 leading-relaxed max-w-md">
-                          {cert.description}
-                        </p>
+                        <>
+                          <p className="text-sm text-gray-300 leading-relaxed max-w-md mb-2">
+                            {cert.description}
+                          </p>
+                          <p className="text-xs uppercase tracking-wider text-gray-400">
+                            Tap or click to enlarge
+                          </p>
+                        </>
                       )}
                     </div>
                   </div>
@@ -178,6 +212,88 @@ const Certificates = () => {
               );
             })}
           </div>
+
+          {/* Mobile and desktop lightbox */}
+          {expandedCertificate && (
+            <div
+              className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-black/85 backdrop-blur-sm p-4 md:p-8"
+              onPointerDown={(event) => {
+                if (event.target !== event.currentTarget) return;
+                backdropPointerStart.current = { x: event.clientX, y: event.clientY };
+                isBackdropPointerMove.current = false;
+              }}
+              onPointerMove={(event) => {
+                if (!backdropPointerStart.current) return;
+                const deltaX = Math.abs(event.clientX - backdropPointerStart.current.x);
+                const deltaY = Math.abs(event.clientY - backdropPointerStart.current.y);
+
+                if (deltaX > 8 || deltaY > 8) {
+                  isBackdropPointerMove.current = true;
+                }
+              }}
+              onPointerUp={(event) => {
+                if (event.target !== event.currentTarget) return;
+
+                if (!isBackdropPointerMove.current) {
+                  setExpandedCertificate(null);
+                }
+
+                backdropPointerStart.current = null;
+                isBackdropPointerMove.current = false;
+              }}
+              onPointerCancel={() => {
+                backdropPointerStart.current = null;
+                isBackdropPointerMove.current = false;
+              }}
+              aria-modal="true"
+              role="dialog"
+            >
+              <div
+                className="relative w-fit max-w-[95vw] rounded-2xl overflow-y-auto bg-dark border border-white/10 shadow-2xl flex flex-col max-h-[90vh] md:max-h-[85vh]"
+                onClick={(event) => event.stopPropagation()}
+              >
+                <button
+                  onClick={() => setExpandedCertificate(null)}
+                  className="absolute top-4 right-4 z-10 p-2 rounded-full bg-dark/80 hover:bg-dark border border-white/10 text-white hover:border-purple/50 transition-all"
+                  aria-label="Close certificate preview"
+                >
+                  <X size={24} />
+                </button>
+
+                {/* Image Section */}
+                <div className="flex-shrink-0 flex items-center justify-center bg-gradient-to-b from-gray-950 to-dark p-4 md:p-6">
+                  <img
+                    src={expandedCertificate.image}
+                    alt={expandedCertificate.title}
+                    className={`${
+                      expandedCertificate.type === 'portrait'
+                        ? 'block w-[82vw] max-w-[520px] h-auto max-h-[72vh] object-contain'
+                        : 'block w-[92vw] max-w-[1000px] h-auto max-h-[68vh] object-contain'
+                    }`}
+                  />
+                </div>
+
+                {/* Content Section */}
+                <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-4">
+                  <div className="flex items-center gap-2">
+                    <Award className="text-purple flex-shrink-0" size={22} />
+                    <span className="text-sm font-medium text-purple">{expandedCertificate.issuer}</span>
+                  </div>
+                  <div>
+                    <h3 className="text-3xl font-bold text-white mb-2">
+                      {expandedCertificate.title}
+                    </h3>
+                    <p className="text-base text-gray-400">{expandedCertificate.date}</p>
+                  </div>
+                  <div className="border-t border-white/10 pt-4">
+                    <p className="text-gray-300 leading-relaxed text-base">
+                      {expandedCertificate.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Navigation Buttons */}
           <div className="flex justify-center items-center gap-4 mt-8">
@@ -220,18 +336,6 @@ const Certificates = () => {
             </button>
           </div>
 
-          {/* View All Link */}
-          <div className="text-center mt-8">
-            <a
-              href="https://github.com/luhnox"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-purple hover:text-purple-light transition-colors duration-300"
-            >
-              View all credentials on GitHub
-              <ExternalLink size={16} />
-            </a>
-          </div>
         </div>
       </div>
     </section>
