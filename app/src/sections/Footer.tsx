@@ -44,8 +44,8 @@ const Footer = () => {
               luhnox
             </a>
             <p className="text-gray-400 mb-6 max-w-md">
-              Full Stack Developer & UI Designer crafting digital experiences that blend 
-              technical precision with creative fluidity. Let's build something amazing together.
+              Writing code behind the scenes, breaking things, fixing them, and slowly building real stuff.
+              Currently learning PHP, Python, JavaScript, and how servers actually work. 😅
             </p>
             {/* Social Links */}
             <div className="flex gap-3">
