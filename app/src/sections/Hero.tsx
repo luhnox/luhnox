@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowDown, Github, Instagram, Mail, Music2, Linkedin } from 'lucide-react';
+import { fetchGitHubPortfolioStats, GITHUB_USERNAME } from '@/lib/github';
 
 const Hero = () => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [heroStats, setHeroStats] = useState({ yearsExperience: 5, totalProjects: 50 });
   const heroRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
 
@@ -36,6 +38,26 @@ const Hero = () => {
       window.removeEventListener('mousemove', handleMouseMove);
       heroRef.current?.removeEventListener('mouseleave', handleMouseLeave);
     };
+  }, []);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const loadHeroStats = async () => {
+      try {
+        const stats = await fetchGitHubPortfolioStats(GITHUB_USERNAME, controller.signal);
+        setHeroStats({
+          yearsExperience: stats.yearsExperience,
+          totalProjects: stats.totalProjects,
+        });
+      } catch {
+        // Keep fallback values if API is unavailable.
+      }
+    };
+
+    loadHeroStats();
+
+    return () => controller.abort();
   }, []);
 
   const scrollToAbout = () => {
@@ -198,20 +220,20 @@ const Hero = () => {
 
               {/* Floating badges */}
               <div className="absolute -top-4 -right-4 px-4 py-2 glass rounded-full text-sm font-medium text-purple animate-float">
-                5+ Years
+                {heroStats.yearsExperience}+ Years
               </div>
               <div
                 className="absolute -bottom-4 -left-4 px-4 py-2 glass rounded-full text-sm font-medium text-blue-400 animate-float"
                 style={{ animationDelay: '1s' }}
               >
-                50+ Projects
+                {heroStats.totalProjects}+ Projects
               </div>
-              <div
+              {/* <div
                 className="absolute top-1/2 -right-8 px-4 py-2 glass rounded-full text-sm font-medium text-green-400 animate-float"
                 style={{ animationDelay: '2s' }}
               >
                 Available
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

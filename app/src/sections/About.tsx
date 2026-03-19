@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { Code2, Coffee, Award, Users } from 'lucide-react';
+import { Code2, Coffee } from 'lucide-react';
+import { fetchGitHubPortfolioStats, GITHUB_USERNAME } from '@/lib/github';
 
 interface StatProps {
   icon: React.ReactNode;
@@ -78,6 +79,7 @@ const AnimatedStat = ({ icon, value, suffix, label, delay }: StatProps) => {
 
 const About = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [aboutStats, setAboutStats] = useState({ totalProjects: 50, yearsExperience: 5 });
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -97,11 +99,41 @@ const About = () => {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const loadStats = async () => {
+      try {
+        const stats = await fetchGitHubPortfolioStats(GITHUB_USERNAME, controller.signal);
+        setAboutStats({
+          totalProjects: stats.totalProjects,
+          yearsExperience: stats.yearsExperience,
+        });
+      } catch {
+        // Keep fallback values if API is unavailable.
+      }
+    };
+
+    loadStats();
+
+    return () => controller.abort();
+  }, []);
+
   const stats = [
-    { icon: <Code2 size={28} />, value: 50, suffix: '+', label: 'Projects Completed' },
-    { icon: <Coffee size={28} />, value: 5, suffix: '+', label: 'Years Experience' },
-    { icon: <Users size={28} />, value: 30, suffix: '+', label: 'Happy Clients' },
-    { icon: <Award size={28} />, value: 100, suffix: '%', label: 'Satisfaction Rate' },
+    {
+      icon: <Code2 size={28} />,
+      value: aboutStats.totalProjects,
+      suffix: '+',
+      label: 'Projects Completed',
+    },
+    {
+      icon: <Coffee size={28} />,
+      value: aboutStats.yearsExperience,
+      suffix: '+',
+      label: 'Years Experience',
+    },
+    // { icon: <Users size={28} />, value: 30, suffix: '+', label: 'Happy Clients' },
+    // { icon: <Award size={28} />, value: 100, suffix: '%', label: 'Satisfaction Rate' },
   ];
 
   return (
@@ -142,7 +174,7 @@ const About = () => {
               <p>
                 Throughout my academic journey from SMP to SMK (Vocational High School), I dedicated myself to 
                 mastering various programming languages and technologies. My expertise spans across 
-                <span className="text-purple font-medium"> PHP, JavaScript, Java, Lua, Python, TypeScript/TSX, HTML, and CSS</span>.
+                <span className="text-purple font-medium"> PHP, JavaScript, Java, Lua, Python, TypeScript, HTML, and CSS</span>.
               </p>
               <p>
                 I believe in writing clean, efficient code and creating user experiences that are both 
@@ -171,10 +203,10 @@ const About = () => {
                 <div className="text-sm text-gray-500 mb-1">Education</div>
                 <div className="text-white font-medium">SMK Graduate</div>
               </div>
-              <div className="glass rounded-xl p-4">
+              {/* <div className="glass rounded-xl p-4">
                 <div className="text-sm text-gray-500 mb-1">Availability</div>
                 <div className="text-green-400 font-medium">Open to Work</div>
-              </div>
+              </div> */}
             </div>
           </div>
 

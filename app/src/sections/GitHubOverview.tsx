@@ -1,5 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Activity, GitCommitHorizontal, Github, ExternalLink, Clock3 } from 'lucide-react';
+import {
+  fetchGitHubPortfolioStats,
+  GITHUB_REPO,
+  GITHUB_USERNAME,
+  getGitHubHeaders,
+  hasGitHubToken,
+  type GitHubPortfolioStats,
+} from '@/lib/github';
 
 interface LatestCommit {
   sha: string;
@@ -17,8 +25,15 @@ interface PublicEvent {
   created_at: string;
 }
 
-const GITHUB_USERNAME = 'luhnox';
-const GITHUB_REPO = 'luhnox/luhnox';
+interface ContributionDay {
+  contributionCount: number;
+  date: string;
+  color: string;
+}
+
+interface ContributionWeek {
+  contributionDays: ContributionDay[];
+}
 
 const formatRelativeTime = (isoDate: string) => {
   const diffMs = Date.now() - new Date(isoDate).getTime();
@@ -62,25 +77,62 @@ const mapEventType = (eventType: string) => {
   return labels[eventType] ?? eventType.replace('Event', '');
 };
 
+const formatOrdinal = (value: number) => {
+  const mod100 = value % 100;
+  if (mod100 >= 11 && mod100 <= 13) return `${value}th`;
+
+  switch (value % 10) {
+    case 1:
+      return `${value}st`;
+    case 2:
+      return `${value}nd`;
+    case 3:
+      return `${value}rd`;
+    default:
+      return `${value}th`;
+  }
+};
+
+const formatContributionDayLabel = (isoDate: string) => {
+  const date = new Date(isoDate);
+  const month = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(date);
+  const day = formatOrdinal(date.getDate());
+  return `${month} ${day}`;
+};
+
 const GitHubOverview = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [commit, setCommit] = useState<LatestCommit | null>(null);
   const [events, setEvents] = useState<PublicEvent[]>([]);
+  const [stats, setStats] = useState<GitHubPortfolioStats | null>(null);
   const [showExactTime, setShowExactTime] = useState(false);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [contributionWeeks, setContributionWeeks] = useState<ContributionWeek[]>([]);
+  const [totalContributions, setTotalContributions] = useState(0);
+  const [activeContributionMessage, setActiveContributionMessage] = useState<string>('');
 
   useEffect(() => {
     const controller = new AbortController();
 
     const loadGitHubData = async () => {
       try {
+        const eventsEndpoint = hasGitHubToken()
+          ? `https://api.github.com/users/${GITHUB_USERNAME}/events?per_page=5`
+          : `https://api.github.com/users/${GITHUB_USERNAME}/events/public?per_page=5`;
+
         const [commitsResponse, eventsResponse] = await Promise.all([
           fetch(`https://api.github.com/repos/${GITHUB_REPO}/commits?per_page=1`, {
             signal: controller.signal,
+            headers: getGitHubHeaders(),
           }),
-          fetch(`https://api.github.com/users/${GITHUB_USERNAME}/events/public?per_page=5`, {
+          fetch(eventsEndpoint, {
             signal: controller.signal,
+            headers: getGitHubHeaders(),
           }),
         ]);
+
+        const profileStats = await fetchGitHubPortfolioStats(GITHUB_USERNAME, controller.signal);
+        setStats(profileStats);
 
         if (commitsResponse.ok) {
           const commits = await commitsResponse.json();
@@ -101,6 +153,21 @@ const GitHubOverview = () => {
           if (Array.isArray(eventData)) {
             setEvents(eventData.slice(0, 4));
           }
+        } else {
+          const fallbackPublicEvents = await fetch(
+            `https://api.github.com/users/${GITHUB_USERNAME}/events/public?per_page=5`,
+            {
+              signal: controller.signal,
+              headers: getGitHubHeaders(),
+            }
+          );
+
+          if (fallbackPublicEvents.ok) {
+            const fallbackEventData = await fallbackPublicEvents.json();
+            if (Array.isArray(fallbackEventData)) {
+              setEvents(fallbackEventData.slice(0, 4));
+            }
+          }
         }
       } catch {
         // If GitHub API fails, the section still renders static overview links.
@@ -114,8 +181,187 @@ const GitHubOverview = () => {
     return () => controller.abort();
   }, []);
 
-  const contributionChart = useMemo(
-    () => `https://ghchart.rshah.org/7e6ee3/${GITHUB_USERNAME}`,
+  const availableYears = useMemo(() => {
+    const currentYear = new Date().getFullYear();
+    const startYear = stats?.startYear ?? currentYear;
+
+    const safeStartYear = Math.min(startYear, currentYear);
+    const years: number[] = [];
+
+    for (let year = currentYear; year >= safeStartYear; year -= 1) {
+      years.push(year);
+    }
+
+    return years;
+  }, [stats?.startYear]);
+
+  useEffect(() => {
+    if (availableYears.length === 0) return;
+
+    if (!availableYears.includes(selectedYear)) {
+      setSelectedYear(availableYears[0]);
+    }
+  }, [availableYears, selectedYear]);
+
+  useEffect(() => {
+    setActiveContributionMessage('');
+  }, [selectedYear]);
+
+  const overviewHref = useMemo(() => {
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const from = `${selectedYear}-01-01`;
+
+    const to =
+      selectedYear === currentYear
+        ? now.toISOString().slice(0, 10)
+        : `${selectedYear}-12-31`;
+
+    return `https://github.com/${GITHUB_USERNAME}?tab=overview&from=${from}&to=${to}`;
+  }, [selectedYear]);
+
+  useEffect(() => {
+    if (!hasGitHubToken()) {
+      setContributionWeeks([]);
+      setTotalContributions(0);
+      return;
+    }
+
+    const controller = new AbortController();
+
+    const loadContributionCalendar = async () => {
+      try {
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        const from = `${selectedYear}-01-01T00:00:00Z`;
+        const to =
+          selectedYear === currentYear
+            ? now.toISOString()
+            : `${selectedYear}-12-31T23:59:59Z`;
+
+        const query = `
+          query($login: String!, $from: DateTime!, $to: DateTime!) {
+            viewer {
+              login
+              contributionsCollection(from: $from, to: $to) {
+                contributionCalendar {
+                  totalContributions
+                  weeks {
+                    contributionDays {
+                      contributionCount
+                      date
+                      color
+                    }
+                  }
+                }
+                commitContributionsByRepository(maxRepositories: 100) {
+                  contributions {
+                    totalCount
+                  }
+                  repository {
+                    isPrivate
+                  }
+                }
+              }
+            }
+            user(login: $login) {
+              contributionsCollection(from: $from, to: $to) {
+                contributionCalendar {
+                  totalContributions
+                  weeks {
+                    contributionDays {
+                      contributionCount
+                      date
+                      color
+                    }
+                  }
+                }
+                commitContributionsByRepository(maxRepositories: 100) {
+                  contributions {
+                    totalCount
+                  }
+                  repository {
+                    isPrivate
+                  }
+                }
+              }
+            }
+          }
+        `;
+
+        const response = await fetch('https://api.github.com/graphql', {
+          method: 'POST',
+          headers: {
+            ...getGitHubHeaders(),
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            query,
+            variables: {
+              login: GITHUB_USERNAME,
+              from,
+              to,
+            },
+          }),
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch contribution calendar.');
+        }
+
+        const payload = await response.json();
+        const viewerCalendar = payload?.data?.viewer?.contributionsCollection?.contributionCalendar;
+        const userCalendar = payload?.data?.user?.contributionsCollection?.contributionCalendar;
+        const viewerLogin = payload?.data?.viewer?.login?.toLowerCase();
+
+        const calendar =
+          viewerLogin === GITHUB_USERNAME.toLowerCase() && viewerCalendar
+            ? viewerCalendar
+            : userCalendar;
+
+        setContributionWeeks(calendar?.weeks ?? []);
+        setTotalContributions(Number(calendar?.totalContributions ?? 0));
+      } catch {
+        setContributionWeeks([]);
+        setTotalContributions(0);
+      }
+    };
+
+    loadContributionCalendar();
+
+    return () => controller.abort();
+  }, [selectedYear]);
+
+  const contributionChart = useMemo(() => {
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const from = `${selectedYear}-01-01`;
+    const to =
+      selectedYear === currentYear
+        ? now.toISOString().slice(0, 10)
+        : `${selectedYear}-12-31`;
+
+    return `https://ghchart.rshah.org/7e6ee3/${GITHUB_USERNAME}?from=${from}&to=${to}`;
+  }, [selectedYear]);
+
+  const monthLabels = useMemo(() => {
+    let previousMonth = -1;
+
+    return contributionWeeks.map((week) => {
+      const firstDay = week.contributionDays[0]?.date;
+      if (!firstDay) return '';
+
+      const month = new Date(firstDay).getMonth();
+      if (month === previousMonth) return '';
+
+      previousMonth = month;
+      return new Intl.DateTimeFormat('en-US', { month: 'short' }).format(new Date(firstDay));
+    });
+  }, [contributionWeeks]);
+
+  const monthDateFormatter = useMemo(
+    () => new Intl.DateTimeFormat('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
     []
   );
 
@@ -139,24 +385,129 @@ const GitHubOverview = () => {
         <div className="glass rounded-3xl p-4 md:p-6 border border-white/10">
           <div className="flex items-center justify-between gap-4 mb-4">
             <h3 className="text-lg md:text-xl font-semibold text-white">Contribution Activity</h3>
-            <a
-              href="https://github.com/luhnox?tab=overview&from=2026-03-01&to=2026-03-18"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-sm text-purple hover:text-purple-light transition-colors"
-            >
-              View GitHub Overview <ExternalLink size={14} />
-            </a>
+            <div className="flex items-center gap-2">
+              <select
+                value={selectedYear}
+                onChange={(event) => setSelectedYear(Number(event.target.value))}
+                className="bg-black/30 border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple/50"
+                aria-label="Select overview year"
+              >
+                {availableYears.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+              <a
+                href={overviewHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm text-purple hover:text-purple-light transition-colors"
+              >
+                View GitHub Overview <ExternalLink size={14} />
+              </a>
+            </div>
           </div>
 
           <div className="rounded-2xl bg-black/30 border border-white/10 p-3 md:p-4 overflow-x-auto">
-            <img
-              src={contributionChart}
-              alt="GitHub contribution chart"
-              className="min-w-[700px] w-full"
-              loading="lazy"
-            />
+            {contributionWeeks.length > 0 ? (
+              <>
+                <div className="min-w-[760px] inline-flex gap-1 mb-2">
+                  {monthLabels.map((label, index) => (
+                    <div key={`${label}-${index}`} className="w-3 relative h-4">
+                      {label && (
+                        <span className="absolute left-0 top-0 text-[10px] leading-none text-gray-500">
+                          {label}
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <div className="min-w-[760px] inline-flex gap-1 items-start">
+                  {contributionWeeks.map((week, weekIndex) => (
+                    <div key={weekIndex} className="flex flex-col gap-1">
+                      {week.contributionDays.map((day) => (
+                        <div
+                          key={day.date}
+                          className="w-3 h-3 rounded-[2px]"
+                          data-cursor-hover="true"
+                          style={{ backgroundColor: day.color }}
+                          title={`${day.contributionCount} contribution${
+                            day.contributionCount === 1 ? '' : 's'
+                          } on ${monthDateFormatter.format(new Date(day.date))}`}
+                          onMouseEnter={() => {
+                            const label = formatContributionDayLabel(day.date);
+                            if (day.contributionCount === 0) {
+                              setActiveContributionMessage(`No contribution on ${label}`);
+                              return;
+                            }
+
+                            setActiveContributionMessage(
+                              `${day.contributionCount} contribution${
+                                day.contributionCount === 1 ? '' : 's'
+                              } on ${label}`
+                            );
+                          }}
+                          onClick={() => {
+                            const label = formatContributionDayLabel(day.date);
+                            if (day.contributionCount === 0) {
+                              setActiveContributionMessage(`No contribution on ${label}`);
+                              return;
+                            }
+
+                            setActiveContributionMessage(
+                              `${day.contributionCount} contribution${
+                                day.contributionCount === 1 ? '' : 's'
+                              } on ${label}`
+                            );
+                          }}
+                          aria-label={`${day.contributionCount} contribution${
+                            day.contributionCount === 1 ? '' : 's'
+                          } on ${monthDateFormatter.format(new Date(day.date))}`}
+                        />
+                      ))}
+                    </div>
+                  ))}
+                </div>
+                <p className="text-xs text-gray-500 mt-3">
+                  {totalContributions} contribution{totalContributions === 1 ? '' : 's'} in {selectedYear}
+                </p>
+                <p className="text-xs text-purple/90 mt-1 min-h-[18px]">
+                  {activeContributionMessage || 'Hover or tap a square to see daily contributions'}
+                </p>
+              </>
+            ) : (
+              <img
+                src={contributionChart}
+                alt="GitHub contribution chart"
+                className="min-w-[700px] w-full"
+                loading="lazy"
+              />
+            )}
           </div>
+
+          {stats && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
+              <div className="rounded-xl bg-black/25 border border-white/10 px-3 py-3">
+                <div className="text-xs text-gray-500">Years Experience</div>
+                <div className="text-lg font-semibold text-white">{stats.yearsExperience}+</div>
+              </div>
+              <div className="rounded-xl bg-black/25 border border-white/10 px-3 py-3">
+                <div className="text-xs text-gray-500">Projects (Total)</div>
+                <div className="text-lg font-semibold text-white">{stats.totalProjects}+</div>
+              </div>
+              <div className="rounded-xl bg-black/25 border border-white/10 px-3 py-3">
+                <div className="text-xs text-gray-500">Public Projects</div>
+                <div className="text-lg font-semibold text-white">{stats.publicProjects}</div>
+              </div>
+              <div className="rounded-xl bg-black/25 border border-white/10 px-3 py-3">
+                <div className="text-xs text-gray-500">Private Projects</div>
+                <div className="text-lg font-semibold text-white">
+                  {hasGitHubToken() ? stats.privateProjects : 'Token required'}
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="grid md:grid-cols-2 gap-4 mt-5">
             <div className="rounded-2xl bg-black/25 border border-white/10 p-4 md:p-5">
@@ -202,7 +553,9 @@ const GitHubOverview = () => {
             <div className="rounded-2xl bg-black/25 border border-white/10 p-4 md:p-5">
               <div className="flex items-center gap-2 text-purple mb-2">
                 <Activity size={18} />
-                <h4 className="font-semibold text-white">Recent Public Activity</h4>
+                <h4 className="font-semibold text-white">
+                  {hasGitHubToken() ? 'Recent Activity' : 'Recent Activity'}
+                </h4>
               </div>
 
               {isLoading && <p className="text-sm text-gray-400">Loading activity feed...</p>}

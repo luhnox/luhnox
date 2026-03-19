@@ -40,12 +40,45 @@ const Experience = () => {
     {
       id: 1,
       company: 'Samsung Service Center Banjarmasin',
-      position: 'Technical Intern',
+      position: 'Internship',
       duration: '1 Month',
       location: 'Banjarmasin, Indonesia',
       description:
-        'Completed an intensive internship program focusing on mobile device diagnostics, hardware repair, and software troubleshooting. Gained hands-on experience with Samsung devices and professional service protocols.',
+        'Completed a 1-month internship as a mobile technician, focusing on issue diagnostics, hardware repair, and software troubleshooting for smartphones.',
       link: 'https://www.google.com/maps/place/Samsung+Service+Center+Banjarmasin/@-3.3474012,114.6253441,18.83z',
+      type: 'internship',
+    },
+    {
+      id: 2,
+      company: 'PTIK ULM',
+      position: 'Internship',
+      duration: '3 Months',
+      location: 'Banjarbaru, Indonesia',
+      description:
+        'Completed a 3-month internship focused on repairing damaged LAN cables in the Agriculture and Health buildings, while also learning to build database-driven websites using PHP and phpMyAdmin.',
+      link: 'https://www.google.com/maps/place/PTIK+ULM/@-3.4458117,114.8436607,19.75z',
+      type: 'internship',
+    },
+    {
+      id: 3,
+      company: 'Bengkel HP',
+      position: 'Internship',
+      duration: '3 Months',
+      location: 'Martapura, Indonesia',
+      description:
+        'Completed a 3-month internship as a smartphone technician, handling device repairs, component checks, and common troubleshooting cases.',
+      link: 'https://www.google.com/maps/place/Bengkel+hp/@-3.3638229,114.8676337,19.25z',
+      type: 'internship',
+    },
+    {
+      id: 4,
+      company: 'SMK Negeri 1 Martapura',
+      position: 'Training Program',
+      duration: '2 Months',
+      location: 'Martapura, Indonesia',
+      description:
+        'Joined a 2-month school training program covering both fundamentals and hands-on smartphone repair, including fault identification and service procedures.',
+      link: 'https://www.google.com/maps/place/SMK+NEGERI+1+MARTAPURA/@-3.4330645,114.8626404,16.44z',
       type: 'internship',
     },
   ];
