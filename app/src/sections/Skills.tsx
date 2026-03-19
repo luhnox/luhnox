@@ -80,7 +80,7 @@ const Skills = () => {
       className="relative py-24 md:py-32 px-6 overflow-hidden"
     >
       {/* Background decoration */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple/5 rounded-full blur-[100px]" />
+      {/* <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple/5 rounded-full blur-[100px]" /> */}
 
       <div className="container mx-auto max-w-7xl relative">
         {/* Section Header */}

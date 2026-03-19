@@ -25,6 +25,30 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    const disableContextMenu = (event: MouseEvent) => {
+      event.preventDefault();
+    };
+
+    const disableTextSelection = (event: Event) => {
+      const target = event.target as HTMLElement | null;
+
+      if (target && ['INPUT', 'TEXTAREA'].includes(target.tagName)) {
+        return;
+      }
+
+      event.preventDefault();
+    };
+
+    window.addEventListener('contextmenu', disableContextMenu);
+    document.addEventListener('selectstart', disableTextSelection);
+
+    return () => {
+      window.removeEventListener('contextmenu', disableContextMenu);
+      document.removeEventListener('selectstart', disableTextSelection);
+    };
+  }, []);
+
   return (
     <div ref={mainRef} className="relative min-h-screen bg-dark text-white overflow-x-hidden">
       {/* Particle Background */}

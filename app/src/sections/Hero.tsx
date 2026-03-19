@@ -74,7 +74,7 @@ const Hero = () => {
       className="relative min-h-screen flex items-center justify-center px-6 py-20 overflow-hidden"
     >
       {/* Background gradient orbs */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple/20 rounded-full blur-[120px] animate-pulse" />
+      {/* <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple/20 rounded-full blur-[120px] animate-pulse" /> */}
       <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-500/10 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '1s' }} />
 
       <div className="container mx-auto max-w-7xl">
@@ -110,7 +110,7 @@ const Hero = () => {
               }`}
               style={{ transitionDelay: '0.4s' }}
             >
-              Full Stack Developer & UI Designer
+              Backend Developer
             </h2>
 
             {/* Description */}
@@ -120,9 +120,8 @@ const Hero = () => {
               }`}
               style={{ transitionDelay: '0.5s' }}
             >
-              I craft digital experiences that blend technical precision with creative fluidity. 
-              Specializing in building scalable web applications and immersive user interfaces 
-              with expertise in multiple programming languages.
+              I’m still a beginner, learning to code and figuring things out one step at a time. 
+              I’m building small projects, making mistakes, and slowly getting better — all while trying to keep it fun and creative.
             </p>
 
             {/* CTA Buttons */}
@@ -246,12 +245,18 @@ const Hero = () => {
         }`}
         style={{ transitionDelay: '1s' }}
       >
-        <div className="flex flex-col items-center gap-2 text-gray-500">
+        <button
+          type="button"
+          onClick={scrollToAbout}
+          className="flex flex-col items-center gap-2 text-gray-500 hover:text-gray-300 transition-colors animate-float"
+          aria-label="Scroll to about section"
+        >
           <span className="text-xs uppercase tracking-widest">Scroll</span>
-          <div className="w-6 h-10 border-2 border-gray-500 rounded-full flex justify-center pt-2">
-            <div className="w-1 h-2 bg-gray-500 rounded-full animate-bounce" />
+          <div className="relative w-6 h-10 border-2 border-gray-500 rounded-full overflow-hidden">
+            <div className="absolute left-1/2 top-2 w-1.5 h-1.5 bg-gray-400 rounded-full animate-scroll-dot" />
           </div>
-        </div>
+          <ArrowDown size={14} className="animate-scroll-hint" />
+        </button>
       </div>
     </section>
   );

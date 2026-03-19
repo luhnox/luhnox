@@ -23,6 +23,12 @@ interface PublicEvent {
     name: string;
   };
   created_at: string;
+  payload?: {
+    commits?: Array<{
+      sha?: string;
+      message?: string;
+    }>;
+  };
 }
 
 interface ContributionDay {
@@ -115,20 +121,33 @@ const GitHubOverview = () => {
     const controller = new AbortController();
 
     const loadGitHubData = async () => {
+      const fetchWithTokenFallback = async (url: string) => {
+        const primaryResponse = await fetch(url, {
+          signal: controller.signal,
+          headers: getGitHubHeaders(),
+        });
+
+        // If token exists but is invalid/expired on deployment, retry as public.
+        if (hasGitHubToken() && (primaryResponse.status === 401 || primaryResponse.status === 403)) {
+          return fetch(url, {
+            signal: controller.signal,
+            headers: {
+              Accept: 'application/vnd.github+json',
+            },
+          });
+        }
+
+        return primaryResponse;
+      };
+
       try {
         const eventsEndpoint = hasGitHubToken()
           ? `https://api.github.com/users/${GITHUB_USERNAME}/events?per_page=5`
           : `https://api.github.com/users/${GITHUB_USERNAME}/events/public?per_page=5`;
 
         const [commitsResponse, eventsResponse] = await Promise.all([
-          fetch(`https://api.github.com/repos/${GITHUB_REPO}/commits?per_page=1`, {
-            signal: controller.signal,
-            headers: getGitHubHeaders(),
-          }),
-          fetch(eventsEndpoint, {
-            signal: controller.signal,
-            headers: getGitHubHeaders(),
-          }),
+          fetchWithTokenFallback(`https://api.github.com/repos/${GITHUB_REPO}/commits?per_page=1`),
+          fetchWithTokenFallback(eventsEndpoint),
         ]);
 
         const profileStats = await fetchGitHubPortfolioStats(GITHUB_USERNAME, controller.signal);
@@ -148,25 +167,40 @@ const GitHubOverview = () => {
           }
         }
 
+        let resolvedEvents: PublicEvent[] = [];
+
         if (eventsResponse.ok) {
           const eventData = await eventsResponse.json();
           if (Array.isArray(eventData)) {
-            setEvents(eventData.slice(0, 4));
+            resolvedEvents = eventData as PublicEvent[];
+            setEvents(resolvedEvents.slice(0, 4));
           }
         } else {
-          const fallbackPublicEvents = await fetch(
+          const fallbackPublicEvents = await fetchWithTokenFallback(
             `https://api.github.com/users/${GITHUB_USERNAME}/events/public?per_page=5`,
-            {
-              signal: controller.signal,
-              headers: getGitHubHeaders(),
-            }
           );
 
           if (fallbackPublicEvents.ok) {
             const fallbackEventData = await fallbackPublicEvents.json();
             if (Array.isArray(fallbackEventData)) {
-              setEvents(fallbackEventData.slice(0, 4));
+              resolvedEvents = fallbackEventData as PublicEvent[];
+              setEvents(resolvedEvents.slice(0, 4));
             }
+          }
+        }
+
+        // Commit fallback for environments where commit endpoint is unavailable.
+        if (!commitsResponse.ok && !commit && resolvedEvents.length > 0) {
+          const latestPushEvent = resolvedEvents.find((event) => event.type === 'PushEvent');
+          const latestPushedCommit = latestPushEvent?.payload?.commits?.[0];
+
+          if (latestPushEvent?.repo?.name && latestPushedCommit?.sha) {
+            setCommit({
+              sha: latestPushedCommit.sha,
+              date: latestPushEvent.created_at,
+              url: `https://github.com/${latestPushEvent.repo.name}/commit/${latestPushedCommit.sha}`,
+              message: latestPushedCommit.message ?? 'Latest commit message is unavailable.',
+            });
           }
         }
       } catch {
@@ -367,8 +401,6 @@ const GitHubOverview = () => {
 
   return (
     <section id="overview" className="relative py-24 md:py-32 px-6 overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_80%_10%,rgba(126,110,227,0.16),transparent_40%)]" />
-
       <div className="container mx-auto max-w-6xl relative">
         <div className="text-center mb-12">
           <span className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-purple bg-purple/10 rounded-full mb-4">

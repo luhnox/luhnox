@@ -176,17 +176,6 @@ const About = () => {
                 mastering various programming languages and technologies. My expertise spans across 
                 <span className="text-purple font-medium"> PHP, JavaScript, Java, Lua, Python, TypeScript, HTML, and CSS</span>.
               </p>
-              <p>
-                I believe in writing clean, efficient code and creating user experiences that are both 
-                functional and delightful. My time at Samsung Tech Institute and the internship at 
-                Samsung Service Center Banjarmasin has equipped me with real-world industry experience 
-                and professional work ethics.
-              </p>
-              <p>
-                When I'm not coding, you'll find me exploring new technologies, contributing to open-source 
-                projects, or mentoring aspiring developers. I'm always eager to take on challenging projects 
-                that push my boundaries and help me grow as a developer.
-              </p>
             </div>
 
             {/* Personal Info */}

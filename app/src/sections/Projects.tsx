@@ -90,7 +90,7 @@ const Projects = () => {
       className="relative py-24 md:py-32 px-6 overflow-hidden"
     >
       {/* Background decoration */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-purple/5 rounded-full blur-[150px]" />
+      {/* <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-purple/5 rounded-full blur-[150px]" /> */}
 
       <div className="container mx-auto max-w-7xl relative">
         {/* Section Header */}
