@@ -1,5 +1,25 @@
 export const GITHUB_USERNAME = import.meta.env.VITE_GITHUB_USERNAME ?? 'luhnox';
-export const GITHUB_REPO = import.meta.env.VITE_GITHUB_REPO ?? `${GITHUB_USERNAME}/luhnox`;
+
+const normalizeRepoSlug = (value: string | undefined, username: string) => {
+  const fallback = `${username}/luhnox`;
+  if (!value) return fallback;
+
+  const trimmed = value.trim();
+  if (!trimmed) return fallback;
+
+  // Accept full GitHub URL and convert it to owner/repo slug.
+  const fromUrl = trimmed.match(/github\.com\/(.+?\/.+?)(?:\.git)?(?:\/|$)/i)?.[1];
+  if (fromUrl) return fromUrl;
+
+  // If only repo name is provided, assume it belongs to configured username.
+  if (!trimmed.includes('/')) {
+    return `${username}/${trimmed}`;
+  }
+
+  return trimmed.replace(/^\/+|\/+$/g, '');
+};
+
+export const GITHUB_REPO = normalizeRepoSlug(import.meta.env.VITE_GITHUB_REPO, GITHUB_USERNAME);
 
 const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_TOKEN?.trim();
 

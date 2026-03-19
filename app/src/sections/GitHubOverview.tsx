@@ -190,7 +190,21 @@ const GitHubOverview = () => {
         }
 
         // Commit fallback for environments where commit endpoint is unavailable.
-        if (!commitsResponse.ok && !commit && resolvedEvents.length > 0) {
+        if (!commitsResponse.ok && resolvedEvents.length === 0) {
+          const publicEventsResponse = await fetchWithTokenFallback(
+            `https://api.github.com/users/${GITHUB_USERNAME}/events/public?per_page=5`
+          );
+
+          if (publicEventsResponse.ok) {
+            const publicEventsData = await publicEventsResponse.json();
+            if (Array.isArray(publicEventsData)) {
+              resolvedEvents = publicEventsData as PublicEvent[];
+              setEvents(resolvedEvents.slice(0, 4));
+            }
+          }
+        }
+
+        if (!commitsResponse.ok && resolvedEvents.length > 0) {
           const latestPushEvent = resolvedEvents.find((event) => event.type === 'PushEvent');
           const latestPushedCommit = latestPushEvent?.payload?.commits?.[0];
 
