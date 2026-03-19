@@ -1,10 +1,23 @@
 import { useEffect, useRef, useState } from 'react';
+import type { ReactNode } from 'react';
+import { FaJava } from 'react-icons/fa6';
+import {
+  SiCss,
+  SiHtml5,
+  SiJavascript,
+  SiLua,
+  SiNodedotjs,
+  SiPhp,
+  SiPython,
+  SiReact,
+  SiTypescript,
+} from 'react-icons/si';
 
 interface Skill {
   name: string;
   level: number;
   color: string;
-  icon: string;
+  icon: ReactNode;
 }
 
 const Skills = () => {
@@ -30,15 +43,25 @@ const Skills = () => {
   }, []);
 
   const skills: Skill[] = [
-    { name: 'JavaScript', level: 70, color: '#F7DF1E', icon: 'JS' },
-    { name: 'TypeScript', level: 56, color: '#3178C6', icon: 'TS' },
-    { name: 'React', level: 38, color: '#61DAFB', icon: 'Re' },
-    { name: 'Node.js', level: 49, color: '#339933', icon: 'No' },
-    { name: 'Python', level: 40, color: '#3776AB', icon: 'Py' },
-    { name: 'PHP', level: 25, color: '#777BB4', icon: 'Ph' },
-    { name: 'Lua', level: 50, color: '#000080', icon: 'Lu' },
-    { name: 'Java', level: 33, color: '#007396', icon: 'Ja' },
-    { name: 'HTML/CSS', level: 85, color: '#E34F26', icon: 'HC' },
+    { name: 'JavaScript', level: 70, color: '#F7DF1E', icon: <SiJavascript size={22} /> },
+    { name: 'TypeScript', level: 56, color: '#3178C6', icon: <SiTypescript size={22} /> },
+    { name: 'React', level: 38, color: '#61DAFB', icon: <SiReact size={22} /> },
+    { name: 'Node.js', level: 49, color: '#339933', icon: <SiNodedotjs size={22} /> },
+    { name: 'Python', level: 40, color: '#3776AB', icon: <SiPython size={22} /> },
+    { name: 'PHP', level: 25, color: '#777BB4', icon: <SiPhp size={22} /> },
+    { name: 'Lua', level: 50, color: '#000080', icon: <SiLua size={22} /> },
+    { name: 'Java', level: 33, color: '#007396', icon: <FaJava size={22} /> },
+    {
+      name: 'HTML/CSS',
+      level: 85,
+      color: '#E34F26',
+      icon: (
+        <div className="flex items-center gap-0.5">
+          <SiHtml5 size={14} />
+          <SiCss size={14} />
+        </div>
+      ),
+    },
   ];
 
   // Calculate orbit positions
@@ -87,60 +110,68 @@ const Skills = () => {
             style={{ transitionDelay: '0.3s' }}
           >
             <div className="relative w-[350px] h-[350px] md:w-[450px] md:h-[450px]">
-              {/* Center */}
+              {/* Center - Sun (Core) */}
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
-                <div className="w-24 h-24 md:w-32 md:h-32 glass rounded-full flex items-center justify-center animate-pulse-glow">
+                <div className="w-24 h-24 md:w-32 md:h-32 glass rounded-full flex items-center justify-center animate-pulse-glow border-2 border-purple/50">
                   <span className="text-2xl md:text-3xl font-bold gradient-text">Core</span>
                 </div>
               </div>
 
-              {/* Orbit Rings */}
-              <div className="absolute inset-0 border border-dashed border-purple/20 rounded-full animate-orbit" />
-              <div
-                className="absolute inset-8 border border-dashed border-blue-500/20 rounded-full animate-counter-rotate"
-                style={{ animationDuration: '25s' }}
-              />
-              <div
-                className="absolute inset-16 border border-dashed border-purple/10 rounded-full animate-orbit"
-                style={{ animationDuration: '30s' }}
-              />
+              {/* Orbit Rings - Static Background */}
+              <div className="absolute inset-0 border border-dashed border-purple/20 rounded-full" />
+              <div className="absolute inset-8 border border-dashed border-blue-500/20 rounded-full" />
+              <div className="absolute inset-16 border border-dashed border-purple/10 rounded-full" />
 
-              {/* Skill Orbs */}
-              {skills.slice(0, 8).map((skill, index) => {
-                const radius = 140;
-                const pos = getOrbitPosition(index, 8, radius);
-                const isHovered = hoveredSkill === skill.name;
+              {/* Rotating Orbits Container */}
+              <div className="absolute inset-0">
+                {/* Orbit 1 - Inner Ring (8 skills rotating) */}
+                <div
+                  className="absolute inset-0 animate-orbit"
+                  style={{ animationDuration: '30s' }}
+                >
+                  {skills.map((skill, index) => {
+                    const radius = 120;
+                    const pos = getOrbitPosition(index, skills.length, radius);
+                    const isHovered = hoveredSkill === skill.name;
 
-                return (
-                  <div
-                    key={skill.name}
-                    className="absolute top-1/2 left-1/2 transition-all duration-500"
-                    style={{
-                      transform: `translate(calc(-50% + ${pos.x}px), calc(-50% + ${pos.y}px))`,
-                    }}
-                    onMouseEnter={() => setHoveredSkill(skill.name)}
-                    onMouseLeave={() => setHoveredSkill(null)}
-                  >
-                    <div
-                      className={`w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center font-bold text-sm cursor-pointer transition-all duration-300 ${
-                        isHovered ? 'scale-150 shadow-glow-lg' : 'scale-100'
-                      }`}
-                      style={{
-                        backgroundColor: `${skill.color}20`,
-                        border: `2px solid ${skill.color}`,
-                        color: skill.color,
-                      }}
-                    >
-                      {skill.icon}
-                    </div>
-                    {isHovered && (
-                      <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap glass px-3 py-1 rounded-full text-xs">
-                        {skill.name}
+                    return (
+                      <div
+                        key={skill.name}
+                        className="absolute top-1/2 left-1/2"
+                        style={{
+                          transform: `translate(calc(-50% + ${pos.x}px), calc(-50% + ${pos.y}px))`,
+                        }}
+                        onMouseEnter={() => setHoveredSkill(skill.name)}
+                        onMouseLeave={() => setHoveredSkill(null)}
+                      >
+                        <div
+                          className="animate-counter-rotate"
+                          style={{ animationDuration: '30s' }}
+                        >
+                          <div
+                            className={`w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center font-bold text-sm cursor-pointer transition-all duration-300 backdrop-blur-sm ${
+                              isHovered ? 'scale-150 shadow-lg' : 'scale-100'
+                            }`}
+                            style={{
+                              backgroundColor: `${skill.color}25`,
+                              border: `2px solid ${skill.color}`,
+                              color: skill.color,
+                              boxShadow: isHovered ? `0 0 20px ${skill.color}80` : 'none',
+                            }}
+                          >
+                            {skill.icon}
+                          </div>
+                          {isHovered && (
+                            <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap glass px-3 py-1 rounded-full text-xs">
+                              {skill.name}
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    )}
-                  </div>
-                );
-              })}
+                    );
+                  })}
+                </div>
+              </div>
             </div>
           </div>
 

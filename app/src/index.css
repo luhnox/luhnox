@@ -100,6 +100,79 @@
   }
 }
 
+/* Solar System Orbits */
+@keyframes orbit-1 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes orbit-2 {
+  from {
+    transform: rotate(45deg);
+  }
+  to {
+    transform: rotate(405deg);
+  }
+}
+
+@keyframes orbit-3 {
+  from {
+    transform: rotate(90deg);
+  }
+  to {
+    transform: rotate(450deg);
+  }
+}
+
+@keyframes orbit-4 {
+  from {
+    transform: rotate(135deg);
+  }
+  to {
+    transform: rotate(495deg);
+  }
+}
+
+@keyframes orbit-5 {
+  from {
+    transform: rotate(180deg);
+  }
+  to {
+    transform: rotate(540deg);
+  }
+}
+
+@keyframes orbit-6 {
+  from {
+    transform: rotate(225deg);
+  }
+  to {
+    transform: rotate(585deg);
+  }
+}
+
+@keyframes orbit-7 {
+  from {
+    transform: rotate(270deg);
+  }
+  to {
+    transform: rotate(630deg);
+  }
+}
+
+@keyframes orbit-8 {
+  from {
+    transform: rotate(315deg);
+  }
+  to {
+    transform: rotate(675deg);
+  }
+}
+
 @keyframes counter-rotate {
   from {
     transform: rotate(0deg);
