@@ -4,7 +4,6 @@
   "installCommand": "cd app && npm install",
   "buildCommand": "cd app && npm run build",
   "outputDirectory": "app/dist",
-  "env": ["VITE_GITHUB_TOKEN"],
   "rewrites": [
     {
       "source": "/(.*)",
