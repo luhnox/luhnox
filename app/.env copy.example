@@ -1,9 +1,0 @@
-# GitHub API settings (optional)
-# Copy this file to .env and fill the values.
-
-VITE_GITHUB_USERNAME=luhnox
-VITE_GITHUB_REPO=luhnox/luhnox
-
-# Needed if you want to read private repository counts.
-# Recommended scope: repo (or fine-grained token with repository metadata access)
-VITE_GITHUB_TOKEN=ghp_your_token_here
