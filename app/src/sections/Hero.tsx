@@ -226,6 +226,10 @@ const Hero = () => {
                   src="/hero-profile.jpg"
                   alt="luhnox Profile"
                   className="w-full h-full object-cover"
+                  loading="eager"
+                  decoding="async"
+                  width={396}
+                  height={396}
                 />
               </div>
 

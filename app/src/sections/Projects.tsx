@@ -131,6 +131,10 @@ const Projects = () => {
                     className={`w-full h-full object-cover transition-transform duration-700 ${
                       hoveredProject === project.id ? 'scale-110' : 'scale-100'
                     }`}
+                    loading="lazy"
+                    decoding="async"
+                    width={400}
+                    height={224}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-dark via-dark/50 to-transparent" />
                   

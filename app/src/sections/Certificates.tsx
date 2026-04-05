@@ -179,6 +179,10 @@ const Certificates = () => {
                           ? 'w-[500px] h-[350px] md:w-[600px] md:h-[400px]'
                           : 'w-[300px] h-[450px] md:w-[350px] md:h-[500px]'
                       }`}
+                      loading="lazy"
+                      decoding="async"
+                      width={cert.type === 'landscape' ? 600 : 350}
+                      height={cert.type === 'landscape' ? 400 : 500}
                     />
                     
                     {/* Overlay */}

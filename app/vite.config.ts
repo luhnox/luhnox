@@ -14,10 +14,13 @@ export default defineConfig({
   build: {
     target: 'esnext',
     minify: 'esbuild',
+    sourcemap: false,
+    cssCodeSplit: true,
     rollupOptions: {
       output: {
         manualChunks: {
           'react-vendor': ['react', 'react-dom'],
+          'ui-vendors': ['@radix-ui/react-dialog', '@radix-ui/react-popover', '@radix-ui/react-tabs'],
           'icons': ['react-icons', 'lucide-react'],
         },
       },
