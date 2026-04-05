@@ -204,7 +204,7 @@ const Hero = () => {
                 <picture>
                   <source
                     type="image/webp"
-                    srcSet="/hero-profile-396.webp 396w, /hero-profile-792.webp 792w"
+                    srcSet="/hero-profile-396.webp 396w"
                     sizes="(min-width: 768px) 384px, 288px"
                   />
                   <source
