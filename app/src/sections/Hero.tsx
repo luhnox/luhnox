@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowDown, Github, Instagram, Mail, Music2, Linkedin } from 'lucide-react';
-import { fetchGitHubPortfolioStats, GITHUB_USERNAME } from '@/lib/github';
 
 const Hero = () => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [heroStats, setHeroStats] = useState({ yearsExperience: 5, totalProjects: 50 });
+  const heroStats = { yearsExperience: 5, totalProjects: 50 };
   const heroRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const isMobileRef = useRef(window.innerWidth < 768);
@@ -50,26 +49,6 @@ const Hero = () => {
       heroRef.current?.removeEventListener('mouseleave', handleMouseLeave);
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
     };
-  }, []);
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    const loadHeroStats = async () => {
-      try {
-        const stats = await fetchGitHubPortfolioStats(GITHUB_USERNAME, controller.signal);
-        setHeroStats({
-          yearsExperience: stats.yearsExperience,
-          totalProjects: stats.totalProjects,
-        });
-      } catch {
-        // Keep fallback values if API is unavailable.
-      }
-    };
-
-    loadHeroStats();
-
-    return () => controller.abort();
   }, []);
 
   const scrollToAbout = () => {
@@ -226,6 +205,7 @@ const Hero = () => {
                   src="/hero-profile.jpg"
                   alt="luhnox Profile"
                   className="w-full h-full object-cover"
+                  fetchPriority="high"
                   loading="eager"
                   decoding="async"
                   width={396}
