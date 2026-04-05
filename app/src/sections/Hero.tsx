@@ -201,16 +201,28 @@ const Hero = () => {
               
               {/* Image container */}
               <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-purple/30 animate-pulse-glow">
-                <img
-                  src="/hero-profile.jpg"
-                  alt="luhnox Profile"
-                  className="w-full h-full object-cover"
-                  fetchPriority="high"
-                  loading="eager"
-                  decoding="async"
-                  width={396}
-                  height={396}
-                />
+                <picture>
+                  <source
+                    type="image/webp"
+                    srcSet="/hero-profile-396.webp 396w, /hero-profile-792.webp 792w"
+                    sizes="(min-width: 768px) 384px, 288px"
+                  />
+                  <source
+                    type="image/jpeg"
+                    srcSet="/hero-profile-396.jpg 396w, /hero-profile-792.jpg 792w"
+                    sizes="(min-width: 768px) 384px, 288px"
+                  />
+                  <img
+                    src="/hero-profile-396.jpg"
+                    alt="luhnox Profile"
+                    className="w-full h-full object-cover"
+                    fetchPriority="high"
+                    loading="eager"
+                    decoding="async"
+                    width={396}
+                    height={396}
+                  />
+                </picture>
               </div>
 
               {/* Floating badges */}
