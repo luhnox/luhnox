@@ -24,6 +24,14 @@ const Navigation = ({ scrollY }: NavigationProps) => {
     { name: 'Projects', href: '#projects' },
   ];
 
+  const desktopLinks = navLinks.slice(1);
+  const midpoint = Math.ceil(desktopLinks.length / 2);
+  const leftDesktopLinks = desktopLinks.slice(0, midpoint);
+  const rightDesktopLinks = desktopLinks.slice(midpoint);
+
+  const initialLeftLinks = leftDesktopLinks;
+  const initialRightLinks = rightDesktopLinks;
+
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
     if (element) {
@@ -42,22 +50,10 @@ const Navigation = ({ scrollY }: NavigationProps) => {
             : 'opacity-0 -translate-y-full pointer-events-none'
         }`}
       >
-        <div className="glass rounded-full px-2 py-2 flex items-center gap-1">
-          {/* Logo */}
-          <a
-            href="#home"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection('#home');
-            }}
-            className="px-4 py-2 font-bold text-lg gradient-text"
-          >
-            luhnox
-          </a>
-
-          {/* Desktop Links */}
+        <div className="glass rounded-full px-2 py-2 flex items-center gap-1 md:gap-2">
+          {/* Desktop Links - Left */}
           <div className="hidden md:flex items-center gap-1">
-            {navLinks.slice(1).map((link) => (
+            {leftDesktopLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
@@ -71,6 +67,46 @@ const Navigation = ({ scrollY }: NavigationProps) => {
               </a>
             ))}
           </div>
+
+          {/* Logo */}
+          <a
+            href="#home"
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection('#home');
+            }}
+            className="hidden md:inline-flex px-4 py-2 font-bold text-lg gradient-text"
+          >
+            luhnox
+          </a>
+
+          {/* Desktop Links - Right */}
+          <div className="hidden md:flex items-center gap-1">
+            {rightDesktopLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection(link.href);
+                }}
+                className="px-3 py-2 text-sm text-gray-300 hover:text-white rounded-full hover:bg-white/5 transition-all duration-300"
+              >
+                {link.name}
+              </a>
+            ))}
+          </div>
+
+          <a
+            href="#home"
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection('#home');
+            }}
+            className="px-4 py-2 font-bold text-lg gradient-text md:hidden"
+          >
+            luhnox
+          </a>
 
           {/* Mobile Menu Button */}
           <button
@@ -118,12 +154,36 @@ const Navigation = ({ scrollY }: NavigationProps) => {
           isVisible ? 'opacity-0 pointer-events-none' : 'opacity-100'
         }`}
       >
-        <div className="w-full px-6 py-6 flex items-center justify-between">
-          <a href="#home" className="font-bold text-2xl gradient-text">
+        <div className="w-full px-6 py-6 flex items-center justify-between md:justify-center md:gap-8">
+          <div className="hidden md:flex items-center gap-8">
+            {initialLeftLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection(link.href);
+                }}
+                className="text-sm text-gray-300 hover:text-white transition-colors duration-300"
+              >
+                {link.name}
+              </a>
+            ))}
+          </div>
+
+          <a
+            href="#home"
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection('#home');
+            }}
+            className="font-bold text-2xl gradient-text"
+          >
             luhnox
           </a>
+
           <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
+            {initialRightLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}

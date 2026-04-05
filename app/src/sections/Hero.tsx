@@ -1,12 +1,61 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowDown, Github, Instagram, Mail, Music2, Linkedin } from 'lucide-react';
+import { GITHUB_USERNAME, getGitHubHeaders, hasGitHubToken } from '@/lib/github';
+
+interface GitHubHeroProfile {
+  created_at?: string;
+  public_repos?: number;
+  total_private_repos?: number;
+}
 
 const Hero = () => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const heroStats = { yearsExperience: 5, totalProjects: 50 };
+  const [heroStats, setHeroStats] = useState({ yearsExperience: 5, totalProjects: 50 });
   const heroRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const isMobileRef = useRef(window.innerWidth < 768);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    // Delay non-critical stats fetch so hero image/LCP remains the priority.
+    const timerId = window.setTimeout(async () => {
+      try {
+        const endpoint = hasGitHubToken()
+          ? 'https://api.github.com/user'
+          : `https://api.github.com/users/${GITHUB_USERNAME}`;
+
+        const response = await fetch(endpoint, {
+          signal: controller.signal,
+          headers: getGitHubHeaders(),
+        });
+
+        if (!response.ok) return;
+
+        const data = (await response.json()) as GitHubHeroProfile;
+
+        const currentYear = new Date().getFullYear();
+        const createdYear = data.created_at ? new Date(data.created_at).getFullYear() : currentYear;
+        const safeStartYear = Number.isNaN(createdYear) ? currentYear : createdYear;
+        const yearsExperience = Math.max(1, currentYear - safeStartYear + 1);
+
+        const publicProjects = Number(data.public_repos ?? 0);
+        const privateProjects = hasGitHubToken() ? Number(data.total_private_repos ?? 0) : 0;
+
+        setHeroStats({
+          yearsExperience,
+          totalProjects: Math.max(1, publicProjects + privateProjects),
+        });
+      } catch {
+        // Keep fallback stats if GitHub is unavailable/rate-limited.
+      }
+    }, 1200);
+
+    return () => {
+      window.clearTimeout(timerId);
+      controller.abort();
+    };
+  }, []);
 
   useEffect(() => {
     setIsLoaded(true);
@@ -182,6 +231,27 @@ const Hero = () => {
                 <Linkedin size={22} />
               </a>
             </div>
+
+            {/* Mobile scroll indicator */}
+            <div
+              className={`mt-6 flex justify-center lg:justify-start md:hidden transition-all duration-1000 ${
+                isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+              }`}
+              style={{ transitionDelay: '0.8s' }}
+            >
+              <button
+                type="button"
+                onClick={scrollToAbout}
+                className="flex flex-col items-center gap-2 text-gray-500 hover:text-gray-300 transition-colors animate-float scale-90"
+                aria-label="Scroll to about section"
+              >
+                <span className="text-xs uppercase tracking-widest">Scroll</span>
+                <div className="relative w-6 h-10 border-2 border-gray-500 rounded-full overflow-hidden">
+                  <div className="absolute left-1/2 top-2 w-1.5 h-1.5 bg-gray-400 rounded-full animate-scroll-dot" />
+                </div>
+                <ArrowDown size={14} className="animate-scroll-hint" />
+              </button>
+            </div>
           </div>
 
           {/* Right Content - Profile Image */}
@@ -248,7 +318,7 @@ const Hero = () => {
 
       {/* Scroll indicator */}
       <div
-        className={`absolute bottom-10 left-1/2 -translate-x-1/2 transition-all duration-1000 ${
+        className={`hidden md:block absolute bottom-10 left-1/2 -translate-x-1/2 transition-all duration-1000 ${
           isLoaded ? 'opacity-100' : 'opacity-0'
         }`}
         style={{ transitionDelay: '1s' }}

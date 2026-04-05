@@ -171,7 +171,7 @@ const Skills = () => {
 
           {/* Right - Skill Tags */}
           <div
-            className={`flex flex-wrap gap-3 content-start transition-all duration-1000 ${
+            className={`flex flex-wrap gap-4 content-start transition-all duration-1000 ${
               isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
             }`}
             style={{ transitionDelay: '0.5s' }}
@@ -179,22 +179,29 @@ const Skills = () => {
             {skills.map((skill) => (
               <span
                 key={skill.name}
-                className="inline-flex items-center gap-2 px-4 py-2 glass rounded-full text-sm text-gray-300 hover:text-white transition-all duration-300 cursor-default"
+                className="group flex items-center gap-0 overflow-hidden px-3 py-1.5 rounded-full text-[11px] font-medium transition-all duration-300 cursor-default bg-zinc-900/60 border border-white/5 hover:bg-zinc-800/60"
                 style={{
-                  borderColor: skill.color,
-                  border: `1.5px solid ${skill.color}40`,
+                  borderColor: hoveredSkill === skill.name ? `${skill.color}66` : 'rgba(255, 255, 255, 0.08)',
                 }}
                 onMouseEnter={() => setHoveredSkill(skill.name)}
                 onMouseLeave={() => setHoveredSkill(null)}
               >
                 <div
+                  className="shrink-0 transition-colors"
                   style={{
                     color: skill.color,
                   }}
                 >
                   {skill.icon}
                 </div>
-                {skill.name}
+
+                <span
+                  className={`whitespace-nowrap text-white/90 font-medium transition-all duration-300 ${
+                    hoveredSkill === skill.name ? 'max-w-[120px] opacity-100 ml-2' : 'max-w-0 opacity-0 ml-0'
+                  }`}
+                >
+                  {skill.name}
+                </span>
               </span>
             ))}
           </div>
