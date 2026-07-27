@@ -105,7 +105,7 @@ const Projects = () => {
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Featured <span className="gradient-text">Projects</span>
           </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto">
+          <p className="text-muted-foreground max-w-2xl mx-auto">
             A selection of my recent work. Each project represents a unique challenge and solution.
           </p>
         </div>
@@ -150,7 +150,7 @@ const Projects = () => {
                       href={project.githubUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-3 bg-white/10 hover:bg-purple rounded-full transition-all duration-300 hover:scale-110"
+                      className="p-3 bg-muted hover:bg-purple rounded-full transition-all duration-300 hover:scale-110"
                       aria-label="View on GitHub"
                     >
                       <Github size={24} />
@@ -160,7 +160,7 @@ const Projects = () => {
                         href={project.demoUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-3 bg-white/10 hover:bg-purple rounded-full transition-all duration-300 hover:scale-110"
+                        className="p-3 bg-muted hover:bg-purple rounded-full transition-all duration-300 hover:scale-110"
                         aria-label="View Demo"
                       >
                         <ExternalLink size={24} />
@@ -173,10 +173,10 @@ const Projects = () => {
                 <div className="p-6">
                   {/* Title & Stats */}
                   <div className="flex items-start justify-between mb-3">
-                    <h3 className="text-xl font-bold text-white group-hover:text-purple transition-colors">
+                    <h3 className="text-xl font-bold text-foreground group-hover:text-purple transition-colors">
                       {project.title}
                     </h3>
-                    <div className="flex items-center gap-3 text-sm text-gray-500">
+                    <div className="flex items-center gap-3 text-sm text-muted-foreground">
                       {project.stars !== undefined && (
                         <div className="flex items-center gap-1">
                           <Star size={14} />
@@ -193,7 +193,7 @@ const Projects = () => {
                   </div>
 
                   {/* Description */}
-                  <p className="text-gray-400 text-sm mb-4 line-clamp-2">
+                  <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
                     {project.description}
                   </p>
 

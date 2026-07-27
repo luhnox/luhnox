@@ -89,7 +89,7 @@ const Skills = () => {
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Technical <span className="gradient-text">Expertise</span>
           </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto">
+          <p className="text-muted-foreground max-w-2xl mx-auto">
             Over the years, I've honed my skills in various programming languages and technologies. 
             Here's a snapshot of my technical arsenal.
           </p>
@@ -169,41 +169,50 @@ const Skills = () => {
             </div>
           </div>
 
-          {/* Right - Skill Tags */}
+          {/*
+            Each skill's proficiency was already in the data but never drawn —
+            the column here was a row of pills that only revealed their name on
+            hover, so it read as a handful of unlabelled dots beside a diagram.
+            Listing them with their level uses what is there and gives the
+            right half something to hold.
+          */}
           <div
-            className={`flex flex-wrap gap-4 content-start transition-all duration-1000 ${
-              isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
+            className={`transition-all duration-1000 ${
+              isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-6'
             }`}
-            style={{ transitionDelay: '0.5s' }}
+            style={{ transitionDelay: '0.4s' }}
           >
-            {skills.map((skill) => (
-              <span
-                key={skill.name}
-                className="group flex items-center gap-0 overflow-hidden px-3 py-1.5 rounded-full text-[11px] font-medium transition-all duration-300 cursor-default bg-zinc-900/60 border border-white/5 hover:bg-zinc-800/60"
-                style={{
-                  borderColor: hoveredSkill === skill.name ? `${skill.color}66` : 'rgba(255, 255, 255, 0.08)',
-                }}
-                onMouseEnter={() => setHoveredSkill(skill.name)}
-                onMouseLeave={() => setHoveredSkill(null)}
-              >
-                <div
-                  className="shrink-0 transition-colors"
-                  style={{
-                    color: skill.color,
-                  }}
+            <ul className="divide-y divide-border">
+              {skills.map((skill, index) => (
+                <li
+                  key={skill.name}
+                  className="group flex items-center gap-4 py-4"
+                  onMouseEnter={() => setHoveredSkill(skill.name)}
+                  onMouseLeave={() => setHoveredSkill(null)}
                 >
-                  {skill.icon}
-                </div>
+                  <span className="shrink-0 transition-transform group-hover:scale-110" style={{ color: skill.color }}>
+                    {skill.icon}
+                  </span>
 
-                <span
-                  className={`whitespace-nowrap text-white/90 font-medium transition-all duration-300 ${
-                    hoveredSkill === skill.name ? 'max-w-[120px] opacity-100 ml-2' : 'max-w-0 opacity-0 ml-0'
-                  }`}
-                >
-                  {skill.name}
-                </span>
-              </span>
-            ))}
+                  <span className="w-28 shrink-0 font-medium text-foreground">{skill.name}</span>
+
+                  <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted">
+                    <span
+                      className="block h-full rounded-full transition-[width] duration-1000 ease-out"
+                      style={{
+                        width: isVisible ? `${skill.level}%` : '0%',
+                        backgroundColor: skill.color,
+                        transitionDelay: `${0.5 + index * 0.08}s`,
+                      }}
+                    />
+                  </span>
+
+                  <span className="w-10 shrink-0 text-right font-mono text-xs text-muted-foreground">
+                    {skill.level}%
+                  </span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
@@ -218,7 +227,7 @@ const Skills = () => {
             (tag) => (
               <span
                 key={tag}
-                className="px-4 py-2 glass rounded-full text-sm text-gray-300 hover:text-white hover:bg-purple/20 transition-all duration-300 cursor-default"
+                className="px-4 py-2 glass rounded-full text-sm text-muted-foreground hover:text-foreground hover:bg-purple/20 transition-all duration-300 cursor-default"
               >
                 {tag}
               </span>

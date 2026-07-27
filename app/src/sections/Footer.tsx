@@ -32,7 +32,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="relative py-16 px-6 border-t border-white/5">
+    <footer className="relative py-16 px-6 border-t border-border">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-t from-dark to-transparent" />
 
@@ -43,7 +43,7 @@ const Footer = () => {
             <a href="#home" className="inline-block text-3xl font-bold gradient-text mb-4">
               luhnox
             </a>
-            <p className="text-gray-400 mb-6 max-w-md">
+            <p className="text-muted-foreground mb-6 max-w-md">
               Writing code behind the scenes, breaking things, fixing them, and slowly building real stuff.
               Currently learning PHP, Python, JavaScript, and how servers actually work. 😅
             </p>
@@ -55,7 +55,7 @@ const Footer = () => {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 flex items-center justify-center glass rounded-lg text-gray-400 hover:text-white hover:bg-purple/20 transition-all duration-300 hover:scale-110"
+                  className="w-10 h-10 flex items-center justify-center glass rounded-lg text-muted-foreground hover:text-foreground hover:bg-purple/20 transition-all duration-300 hover:scale-110"
                   aria-label={social.label}
                 >
                   {social.icon}
@@ -76,7 +76,7 @@ const Footer = () => {
                       e.preventDefault();
                       scrollToSection(link.href);
                     }}
-                    className="text-gray-400 hover:text-purple transition-colors duration-300"
+                    className="text-muted-foreground hover:text-purple transition-colors duration-300"
                   >
                     {link.name}
                   </a>
@@ -88,7 +88,7 @@ const Footer = () => {
           {/* Contact Info */}
           <div>
             <h3 className="text-lg font-semibold mb-4">Contact</h3>
-            <ul className="space-y-3 text-gray-400">
+            <ul className="space-y-3 text-muted-foreground">
               <li>
                 <a
                   href="mailto:luhnoxq@gmail.com"
@@ -111,8 +111,8 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-gray-500 text-sm text-center md:text-left">
+        <div className="pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-muted-foreground text-sm text-center md:text-left">
             &copy; {currentYear} luhnox. All rights reserved. Made with{' '}
             <Heart size={14} className="inline text-red-500 fill-red-500" />
           </p>
@@ -120,13 +120,13 @@ const Footer = () => {
           <div className="flex items-center gap-6">
             <a
               href="#"
-              className="text-sm text-gray-500 hover:text-purple transition-colors duration-300"
+              className="text-sm text-muted-foreground hover:text-purple transition-colors duration-300"
             >
               Privacy Policy
             </a>
             <a
               href="#"
-              className="text-sm text-gray-500 hover:text-purple transition-colors duration-300"
+              className="text-sm text-muted-foreground hover:text-purple transition-colors duration-300"
             >
               Terms of Service
             </a>

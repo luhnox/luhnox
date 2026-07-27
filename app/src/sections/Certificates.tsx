@@ -109,7 +109,7 @@ const Certificates = () => {
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             My <span className="gradient-text">Achievements</span>
           </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto">
+          <p className="text-muted-foreground max-w-2xl mx-auto">
             Professional certifications that validate my skills and expertise in the tech industry.
           </p>
         </div>
@@ -194,13 +194,13 @@ const Certificates = () => {
                         <Award className="text-purple" size={20} />
                         <span className="text-sm text-purple font-medium">{cert.issuer}</span>
                       </div>
-                      <h3 className="text-xl md:text-2xl font-bold text-white mb-1">
+                      <h3 className="text-xl md:text-2xl font-bold text-foreground mb-1">
                         {cert.title}
                       </h3>
-                      <p className="text-sm text-gray-400 mb-3">{cert.date}</p>
+                      <p className="text-sm text-muted-foreground mb-3">{cert.date}</p>
                       {isActive && (
                         <>
-                          <p className="text-sm text-gray-300 leading-relaxed max-w-md mb-2">
+                          <p className="text-sm text-muted-foreground leading-relaxed max-w-md mb-2">
                             {cert.description}
                           </p>
                         </>
@@ -215,13 +215,13 @@ const Certificates = () => {
           {/* Minimal lightbox */}
           {expandedCertificate && (
             <div
-              className="fixed inset-0 z-[100] flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 md:p-8"
+              className="fixed inset-0 z-[100] flex items-center justify-center bg-secondary backdrop-blur-sm p-4 md:p-8"
               onClick={() => setExpandedCertificate(null)}
               aria-modal="true"
               role="dialog"
             >
               <div
-                className={`relative rounded-xl overflow-hidden shadow-2xl border border-white/10 bg-black/30 ${
+                className={`relative rounded-xl overflow-hidden shadow-2xl border border-border bg-muted ${
                   expandedCertificate.type === 'portrait'
                     ? 'max-w-[430px] w-[88vw]'
                     : 'max-w-[1100px] w-[95vw]'
@@ -230,13 +230,13 @@ const Certificates = () => {
               >
                 <button
                   onClick={() => setExpandedCertificate(null)}
-                  className="absolute top-3 right-3 z-20 p-2 rounded-full bg-black/55 hover:bg-black/75 text-white transition-colors"
+                  className="absolute top-3 right-3 z-20 p-2 rounded-full bg-secondary hover:bg-secondary text-foreground transition-colors"
                   aria-label="Close certificate preview"
                 >
                   <X size={20} />
                 </button>
 
-                <div className="flex items-center justify-center bg-black/20 p-2 md:p-3">
+                <div className="flex items-center justify-center bg-muted p-2 md:p-3">
                   <img
                     src={expandedCertificate.image}
                     alt={expandedCertificate.title}

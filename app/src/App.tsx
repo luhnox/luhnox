@@ -10,7 +10,7 @@ const Experience = lazy(() => import('./sections/Experience'));
 const GitHubOverview = lazy(() => import('./sections/GitHubOverview'));
 const Projects = lazy(() => import('./sections/Projects'));
 const Footer = lazy(() => import('./sections/Footer'));
-const ParticleBackground = lazy(() => import('./components/ParticleBackground'));
+const CanvasBackground = lazy(() => import('./components/CanvasBackground'));
 const CustomCursor = lazy(() => import('./components/CustomCursor'));
 
 interface DeferredSectionProps {
@@ -55,7 +55,7 @@ const DeferredSection = ({
           fallback={
             <section className={fallbackClassName}>
               <div className="container mx-auto max-w-7xl">
-                <div className="rounded-3xl border border-white/10 bg-white/5" style={{ minHeight: fallbackMinHeight }} />
+                <div className="rounded-3xl border border-border bg-muted/40" style={{ minHeight: fallbackMinHeight }} />
               </div>
             </section>
           }
@@ -65,7 +65,7 @@ const DeferredSection = ({
       ) : (
         <section className={fallbackClassName}>
           <div className="container mx-auto max-w-7xl">
-            <div className="rounded-3xl border border-white/10 bg-white/5" style={{ minHeight: fallbackMinHeight }} />
+            <div className="rounded-3xl border border-border bg-muted/40" style={{ minHeight: fallbackMinHeight }} />
           </div>
         </section>
       )}
@@ -125,11 +125,11 @@ function App() {
   }, []);
 
   return (
-    <div ref={mainRef} className="relative min-h-screen bg-dark text-white overflow-x-hidden">
-      {/* Particle Background */}
+    <div ref={mainRef} className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
+      {/* Canvas backdrop */}
       {enhancementsReady && (
         <Suspense fallback={null}>
-          <ParticleBackground />
+          <CanvasBackground />
           <CustomCursor />
         </Suspense>
       )}

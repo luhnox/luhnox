@@ -423,19 +423,19 @@ const GitHubOverview = () => {
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             Open Source <span className="gradient-text">Activity</span>
           </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto">
+          <p className="text-muted-foreground max-w-2xl mx-auto">
             Snapshot of my coding activity, contribution streaks, and latest commit updates.
           </p>
         </div>
 
-        <div className="glass rounded-3xl p-4 md:p-6 border border-white/10">
+        <div className="glass rounded-3xl p-4 md:p-6 border border-border">
           <div className="flex items-center justify-between gap-4 mb-4">
-            <h3 className="text-lg md:text-xl font-semibold text-white">Contribution Activity</h3>
+            <h3 className="text-lg md:text-xl font-semibold text-foreground">Contribution Activity</h3>
             <div className="flex items-center gap-2">
               <select
                 value={selectedYear}
                 onChange={(event) => setSelectedYear(Number(event.target.value))}
-                className="bg-black/30 border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple/50"
+                className="bg-muted border border-border rounded-lg px-3 py-1.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-purple/50"
                 aria-label="Select overview year"
               >
                 {availableYears.map((year) => (
@@ -455,14 +455,14 @@ const GitHubOverview = () => {
             </div>
           </div>
 
-          <div className="rounded-2xl bg-black/30 border border-white/10 p-3 md:p-4 overflow-x-auto">
+          <div className="rounded-2xl bg-muted border border-border p-3 md:p-4 overflow-x-auto">
             {contributionWeeks.length > 0 ? (
               <>
                 <div className="min-w-[760px] inline-flex gap-1 mb-2">
                   {monthLabels.map((label, index) => (
                     <div key={`${label}-${index}`} className="w-3 relative h-4">
                       {label && (
-                        <span className="absolute left-0 top-0 text-[10px] leading-none text-gray-500">
+                        <span className="absolute left-0 top-0 text-[10px] leading-none text-muted-foreground">
                           {label}
                         </span>
                       )}
@@ -515,7 +515,7 @@ const GitHubOverview = () => {
                     </div>
                   ))}
                 </div>
-                <p className="text-xs text-gray-500 mt-3">
+                <p className="text-xs text-muted-foreground mt-3">
                   {totalContributions} contribution{totalContributions === 1 ? '' : 's'} in {selectedYear}
                 </p>
                 <p className="text-xs text-purple/90 mt-1 min-h-[18px]">
@@ -534,21 +534,21 @@ const GitHubOverview = () => {
 
           {stats && (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
-              <div className="rounded-xl bg-black/25 border border-white/10 px-3 py-3">
-                <div className="text-xs text-gray-500">Years Experience</div>
-                <div className="text-lg font-semibold text-white">{stats.yearsExperience}+</div>
+              <div className="rounded-xl bg-muted border border-border px-3 py-3">
+                <div className="text-xs text-muted-foreground">Years on GitHub</div>
+                <div className="text-lg font-semibold text-foreground">{stats.yearsExperience}+</div>
               </div>
-              <div className="rounded-xl bg-black/25 border border-white/10 px-3 py-3">
-                <div className="text-xs text-gray-500">Projects (Total)</div>
-                <div className="text-lg font-semibold text-white">{stats.totalProjects}+</div>
+              <div className="rounded-xl bg-muted border border-border px-3 py-3">
+                <div className="text-xs text-muted-foreground">Projects (Total)</div>
+                <div className="text-lg font-semibold text-foreground">{stats.totalProjects}+</div>
               </div>
-              <div className="rounded-xl bg-black/25 border border-white/10 px-3 py-3">
-                <div className="text-xs text-gray-500">Public Projects</div>
-                <div className="text-lg font-semibold text-white">{stats.publicProjects}</div>
+              <div className="rounded-xl bg-muted border border-border px-3 py-3">
+                <div className="text-xs text-muted-foreground">Public Projects</div>
+                <div className="text-lg font-semibold text-foreground">{stats.publicProjects}</div>
               </div>
-              <div className="rounded-xl bg-black/25 border border-white/10 px-3 py-3">
-                <div className="text-xs text-gray-500">Private Projects</div>
-                <div className="text-lg font-semibold text-white">
+              <div className="rounded-xl bg-muted border border-border px-3 py-3">
+                <div className="text-xs text-muted-foreground">Private Projects</div>
+                <div className="text-lg font-semibold text-foreground">
                   {hasGitHubToken() ? stats.privateProjects : 'Token required'}
                 </div>
               </div>
@@ -556,13 +556,13 @@ const GitHubOverview = () => {
           )}
 
           <div className="grid md:grid-cols-2 gap-4 mt-5">
-            <div className="rounded-2xl bg-black/25 border border-white/10 p-4 md:p-5">
+            <div className="rounded-2xl bg-muted border border-border p-4 md:p-5">
               <div className="flex items-center gap-2 text-purple mb-2">
                 <GitCommitHorizontal size={18} />
-                <h4 className="font-semibold text-white">Last Commit</h4>
+                <h4 className="font-semibold text-foreground">Last Commit</h4>
               </div>
 
-              {isLoading && <p className="text-sm text-gray-400">Loading latest commit...</p>}
+              {isLoading && <p className="text-sm text-muted-foreground">Loading latest commit...</p>}
 
               {!isLoading && commit && (
                 <>
@@ -574,49 +574,49 @@ const GitHubOverview = () => {
                   >
                     <Github size={15} /> {commit.sha.slice(0, 7)}
                   </a>
-                  <p className="text-sm text-gray-300 mt-2 line-clamp-2">{commit.message}</p>
+                  <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{commit.message}</p>
 
                   <div className="mt-3">
                     <button
                       onClick={() => setShowExactTime((prev) => !prev)}
-                      className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors"
+                      className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
                       title={formatAbsoluteTime(commit.date)}
                     >
                       <Clock3 size={14} /> {formatRelativeTime(commit.date)}
                     </button>
                     {showExactTime && (
-                      <p className="text-xs text-gray-500 mt-2">{formatAbsoluteTime(commit.date)}</p>
+                      <p className="text-xs text-muted-foreground mt-2">{formatAbsoluteTime(commit.date)}</p>
                     )}
                   </div>
                 </>
               )}
 
               {!isLoading && !commit && (
-                <p className="text-sm text-gray-400">Latest commit is temporarily unavailable.</p>
+                <p className="text-sm text-muted-foreground">Latest commit is temporarily unavailable.</p>
               )}
             </div>
 
-            <div className="rounded-2xl bg-black/25 border border-white/10 p-4 md:p-5">
+            <div className="rounded-2xl bg-muted border border-border p-4 md:p-5">
               <div className="flex items-center gap-2 text-purple mb-2">
                 <Activity size={18} />
-                <h4 className="font-semibold text-white">
+                <h4 className="font-semibold text-foreground">
                   {hasGitHubToken() ? 'Recent Activity' : 'Recent Activity'}
                 </h4>
               </div>
 
-              {isLoading && <p className="text-sm text-gray-400">Loading activity feed...</p>}
+              {isLoading && <p className="text-sm text-muted-foreground">Loading activity feed...</p>}
 
               {!isLoading && events.length === 0 && (
-                <p className="text-sm text-gray-400">No public activities available right now.</p>
+                <p className="text-sm text-muted-foreground">No public activities available right now.</p>
               )}
 
               {!isLoading && events.length > 0 && (
                 <ul className="space-y-2">
                   {events.map((event) => (
-                    <li key={event.id} className="text-sm text-gray-300">
-                      <span className="text-white">{mapEventType(event.type)}</span>{' '}
+                    <li key={event.id} className="text-sm text-muted-foreground">
+                      <span className="text-foreground">{mapEventType(event.type)}</span>{' '}
                       on <span className="text-purple">{event.repo.name}</span>
-                      <div className="text-xs text-gray-500 mt-0.5">{formatRelativeTime(event.created_at)}</div>
+                      <div className="text-xs text-muted-foreground mt-0.5">{formatRelativeTime(event.created_at)}</div>
                     </li>
                   ))}
                 </ul>

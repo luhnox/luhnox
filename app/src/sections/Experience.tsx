@@ -105,7 +105,7 @@ const Experience = () => {
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Work <span className="gradient-text">History</span>
           </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto">
+          <p className="text-muted-foreground max-w-2xl mx-auto">
             My professional journey and the experiences that have shaped my career as a developer.
           </p>
         </div>
@@ -113,7 +113,7 @@ const Experience = () => {
         {/* Timeline */}
         <div className="relative">
           {/* Vertical Line */}
-          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-dark-lighter md:-translate-x-1/2">
+          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-background md:-translate-x-1/2">
             <div
               className="absolute top-0 left-0 w-full bg-gradient-to-b from-purple to-blue-500 transition-all duration-2000 ease-out"
               style={{ height: `${lineProgress}%` }}
@@ -152,17 +152,17 @@ const Experience = () => {
                               {exp.type}
                             </span>
                           </div>
-                          <h3 className="text-xl font-bold text-white group-hover:text-purple transition-colors">
+                          <h3 className="text-xl font-bold text-foreground group-hover:text-purple transition-colors">
                             {exp.company}
                           </h3>
-                          <p className="text-gray-400">{exp.position}</p>
+                          <p className="text-muted-foreground">{exp.position}</p>
                         </div>
                         {exp.link && (
                           <a
                             href={exp.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="p-2 text-gray-500 hover:text-purple transition-colors"
+                            className="p-2 text-muted-foreground hover:text-purple transition-colors"
                             aria-label={`Visit ${exp.company}`}
                           >
                             <ExternalLink size={18} />
@@ -171,7 +171,7 @@ const Experience = () => {
                       </div>
 
                       {/* Meta */}
-                      <div className="flex flex-wrap gap-4 mb-4 text-sm text-gray-500">
+                      <div className="flex flex-wrap gap-4 mb-4 text-sm text-muted-foreground">
                         <div className="flex items-center gap-1">
                           <Calendar size={14} />
                           <span>{exp.duration}</span>
@@ -183,7 +183,7 @@ const Experience = () => {
                       </div>
 
                       {/* Description */}
-                      <p className="text-gray-400 text-sm leading-relaxed">
+                      <p className="text-muted-foreground text-sm leading-relaxed">
                         {exp.description}
                       </p>
                     </div>

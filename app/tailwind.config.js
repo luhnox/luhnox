@@ -6,6 +6,10 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ['Outfit', 'sans-serif'],
+        // Set against the sans for contrast, the way the reference pairs a
+        // heavy grotesque with an italic serif and a mono tag.
+        serif: ['"Instrument Serif"', 'Georgia', 'serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
       },
       colors: {
         border: "hsl(var(--border))",

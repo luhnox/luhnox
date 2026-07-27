@@ -5,141 +5,103 @@ interface NavigationProps {
   scrollY: number;
 }
 
+const NAV_LINKS = [
+  { name: 'About', href: '#about' },
+  { name: 'Skills', href: '#skills' },
+  { name: 'Certificates', href: '#certificates' },
+  { name: 'Experience', href: '#experience' },
+  { name: 'Overview', href: '#overview' },
+  { name: 'Projects', href: '#projects' },
+];
+
+/**
+ * The bar reads left to right: whose site this is, then where you can go.
+ *
+ * It used to split the links into two halves and sit the wordmark between
+ * them, which put "luhnox" in the middle of a sentence of destinations and
+ * made it read as one more link.
+ */
 const Navigation = ({ scrollY }: NavigationProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
-    // Show navigation after scrolling past hero
-    setIsVisible(scrollY > 100);
+    setIsScrolled(scrollY > 100);
   }, [scrollY]);
 
-  const navLinks = [
-    { name: 'Home', href: '#home' },
-    { name: 'About', href: '#about' },
-    { name: 'Skills', href: '#skills' },
-    { name: 'Certificates', href: '#certificates' },
-    { name: 'Experience', href: '#experience' },
-    { name: 'Overview', href: '#overview' },
-    { name: 'Projects', href: '#projects' },
-  ];
-
-  const desktopLinks = navLinks.slice(1);
-  const midpoint = Math.ceil(desktopLinks.length / 2);
-  const leftDesktopLinks = desktopLinks.slice(0, midpoint);
-  const rightDesktopLinks = desktopLinks.slice(midpoint);
-
-  const initialLeftLinks = leftDesktopLinks;
-  const initialRightLinks = rightDesktopLinks;
-
   const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
     setIsOpen(false);
+  };
+
+  const handleClick = (href: string) => (event: React.MouseEvent) => {
+    event.preventDefault();
+    scrollToSection(href);
   };
 
   return (
     <>
-      {/* Floating Navigation */}
+      {/* One bar for both states: it only gains a surface once the page moves
+          under it, rather than swapping itself for a second navigation. */}
       <nav
-        className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ${
-          isVisible
-            ? 'opacity-100 translate-y-0'
-            : 'opacity-0 -translate-y-full pointer-events-none'
+        className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+          isScrolled ? 'border-b border-border bg-background/80 backdrop-blur-md' : 'border-b border-transparent'
         }`}
       >
-        <div className="glass rounded-full px-2 py-2 flex items-center gap-1 md:gap-2">
-          {/* Desktop Links - Left */}
-          <div className="hidden md:flex items-center gap-1">
-            {leftDesktopLinks.map((link) => (
+        <div className="container mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+          <a
+            href="#home"
+            onClick={handleClick('#home')}
+            className="text-lg font-extrabold tracking-tight text-foreground"
+          >
+            luhnox<span className="text-accent">.</span>
+          </a>
+
+          <div className="hidden items-center gap-1 md:flex">
+            {NAV_LINKS.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection(link.href);
-                }}
-                className="px-3 py-2 text-sm text-gray-300 hover:text-white rounded-full hover:bg-white/5 transition-all duration-300"
+                onClick={handleClick(link.href)}
+                className="rounded-full px-3.5 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
               >
                 {link.name}
               </a>
             ))}
           </div>
 
-          {/* Logo */}
-          <a
-            href="#home"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection('#home');
-            }}
-            className="hidden md:inline-flex px-4 py-2 font-bold text-lg gradient-text"
-          >
-            luhnox
-          </a>
-
-          {/* Desktop Links - Right */}
-          <div className="hidden md:flex items-center gap-1">
-            {rightDesktopLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection(link.href);
-                }}
-                className="px-3 py-2 text-sm text-gray-300 hover:text-white rounded-full hover:bg-white/5 transition-all duration-300"
-              >
-                {link.name}
-              </a>
-            ))}
-          </div>
-
-          <a
-            href="#home"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection('#home');
-            }}
-            className="px-4 py-2 font-bold text-lg gradient-text md:hidden"
-          >
-            luhnox
-          </a>
-
-          {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 text-white hover:bg-white/5 rounded-full transition-colors"
+            className="rounded-full p-2 text-foreground transition-colors hover:bg-muted md:hidden"
+            aria-label={isOpen ? 'Close menu' : 'Open menu'}
           >
             {isOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
       </nav>
 
-      {/* Mobile Menu */}
       <div
-        className={`fixed inset-0 z-40 md:hidden transition-all duration-500 ${
-          isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
-        }`}
+        className={`fixed inset-0 z-40 md:hidden ${isOpen ? 'visible' : 'invisible'}`}
+        aria-hidden={!isOpen}
       >
-        <div className="absolute inset-0 bg-dark/95 backdrop-blur-xl" onClick={() => setIsOpen(false)} />
         <div
-          className={`absolute top-24 left-4 right-4 glass rounded-2xl p-6 transition-all duration-500 ${
-            isOpen ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0'
+          className={`absolute inset-0 bg-background/80 backdrop-blur-sm transition-opacity duration-300 ${
+            isOpen ? 'opacity-100' : 'opacity-0'
+          }`}
+          onClick={() => setIsOpen(false)}
+        />
+        <div
+          className={`paper-card absolute inset-x-4 top-20 rounded-2xl p-4 transition-all duration-300 ${
+            isOpen ? 'translate-y-0 opacity-100' : '-translate-y-4 opacity-0'
           }`}
         >
-          <div className="flex flex-col gap-2">
-            {navLinks.map((link) => (
+          <div className="flex flex-col">
+            {NAV_LINKS.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection(link.href);
-                }}
-                className="px-4 py-3 text-lg text-gray-300 hover:text-white hover:bg-white/5 rounded-xl transition-all duration-300"
+                onClick={handleClick(link.href)}
+                className="rounded-xl px-4 py-3 text-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
               >
                 {link.name}
               </a>
@@ -147,64 +109,6 @@ const Navigation = ({ scrollY }: NavigationProps) => {
           </div>
         </div>
       </div>
-
-      {/* Initial Hero Navigation */}
-      <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          isVisible ? 'opacity-0 pointer-events-none' : 'opacity-100'
-        }`}
-      >
-        <div className="w-full px-6 py-6 flex items-center justify-between md:justify-center md:gap-8">
-          <div className="hidden md:flex items-center gap-8">
-            {initialLeftLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection(link.href);
-                }}
-                className="text-sm text-gray-300 hover:text-white transition-colors duration-300"
-              >
-                {link.name}
-              </a>
-            ))}
-          </div>
-
-          <a
-            href="#home"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection('#home');
-            }}
-            className="font-bold text-2xl gradient-text"
-          >
-            luhnox
-          </a>
-
-          <div className="hidden md:flex items-center gap-8">
-            {initialRightLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection(link.href);
-                }}
-                className="text-sm text-gray-300 hover:text-white transition-colors duration-300"
-              >
-                {link.name}
-              </a>
-            ))}
-          </div>
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 text-white hover:bg-white/5 rounded-full transition-colors"
-          >
-            <Menu size={24} />
-          </button>
-        </div>
-      </nav>
     </>
   );
 };

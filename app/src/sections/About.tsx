@@ -72,7 +72,7 @@ const AnimatedStat = ({ icon, value, suffix, label, delay }: StatProps) => {
         {count}
         <span className="gradient-text">{suffix}</span>
       </div>
-      <div className="text-gray-400 text-sm">{label}</div>
+      <div className="text-muted-foreground text-sm">{label}</div>
     </div>
   );
 };
@@ -130,7 +130,7 @@ const About = () => {
       icon: <Coffee size={28} />,
       value: aboutStats.yearsExperience,
       suffix: '+',
-      label: 'Years Experience',
+      label: 'Years on GitHub',
     },
     // { icon: <Users size={28} />, value: 30, suffix: '+', label: 'Happy Clients' },
     // { icon: <Award size={28} />, value: 100, suffix: '%', label: 'Satisfaction Rate' },
@@ -165,9 +165,9 @@ const About = () => {
             }`}
             style={{ transitionDelay: '0.2s' }}
           >
-            <div className="space-y-6 text-gray-300 leading-relaxed">
+            <div className="space-y-6 text-muted-foreground leading-relaxed">
               <p className="text-lg">
-                Born on <span className="text-white font-medium">March 12, 2007</span>, my journey into the world of 
+                Born on <span className="text-foreground font-medium">March 12, 2007</span>, my journey into the world of 
                 programming began during my third year of junior high school. What started as a simple curiosity 
                 quickly evolved into an enduring passion for crafting digital solutions.
               </p>
@@ -181,19 +181,19 @@ const About = () => {
             {/* Personal Info */}
             <div className="mt-8 grid grid-cols-2 gap-4">
               <div className="glass rounded-xl p-4">
-                <div className="text-sm text-gray-500 mb-1">Birth Date</div>
-                <div className="text-white font-medium">March 12, 2007</div>
+                <div className="text-sm text-muted-foreground mb-1">Birth Date</div>
+                <div className="text-foreground font-medium">March 12, 2007</div>
               </div>
               <div className="glass rounded-xl p-4">
-                <div className="text-sm text-gray-500 mb-1">Location</div>
-                <div className="text-white font-medium">Banjarmasin, Indonesia</div>
+                <div className="text-sm text-muted-foreground mb-1">Location</div>
+                <div className="text-foreground font-medium">Banjarmasin, Indonesia</div>
               </div>
               <div className="glass rounded-xl p-4">
-                <div className="text-sm text-gray-500 mb-1">Education</div>
-                <div className="text-white font-medium">SMK Graduate</div>
+                <div className="text-sm text-muted-foreground mb-1">Education</div>
+                <div className="text-foreground font-medium">SMK Graduate</div>
               </div>
               {/* <div className="glass rounded-xl p-4">
-                <div className="text-sm text-gray-500 mb-1">Availability</div>
+                <div className="text-sm text-muted-foreground mb-1">Availability</div>
                 <div className="text-green-400 font-medium">Open to Work</div>
               </div> */}
             </div>

@@ -69,27 +69,24 @@ img {
 
 /* Glass morphism enhancement */
 .glass {
-  background: rgba(22, 22, 22, 0.7);
+  background: hsl(var(--card) / 0.75);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid hsl(var(--border));
 }
 
 /* Glow effects */
 .shadow-glow {
-  box-shadow: 0 0 20px rgba(126, 110, 227, 0.3);
+  box-shadow: 0 10px 24px -12px hsl(0 0% 0% / 0.18);
 }
 
 .shadow-glow-lg {
-  box-shadow: 0 0 40px rgba(126, 110, 227, 0.5);
+  box-shadow: 0 18px 40px -16px hsl(0 0% 0% / 0.24);
 }
 
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, #7e6ee3 0%, #3b82f6 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: hsl(var(--accent));
 }
 
 /* Hover lift effect */

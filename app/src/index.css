@@ -3,26 +3,34 @@
 @tailwind utilities;
 
 @layer base {
+  /*
+   * Light editorial palette. The page is paper — an off-white sheet the work
+   * sits on — so surfaces go lighter as they come forward, the opposite of the
+   * dark theme this replaced. Ink is near-black rather than black, which is
+   * what keeps large headings from looking harsh at 80px.
+   */
   :root {
-    --background: 0 0% 4%;
-    --foreground: 0 0% 100%;
-    --card: 0 0% 9%;
-    --card-foreground: 0 0% 100%;
-    --popover: 0 0% 9%;
-    --popover-foreground: 0 0% 100%;
-    --primary: 252 67% 66%;
+    --background: 0 0% 98%;
+    --foreground: 0 0% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 12%;
+    /* Violet carries links and marks; coral is for the one word in a heading
+       that should be read first. Two accents, used sparingly. */
+    --primary: 258 90% 66%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 9%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 69%;
-    --accent: 217 91% 60%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 12%;
+    --muted: 0 0% 94%;
+    --muted-foreground: 0 0% 42%;
+    --accent: 4 92% 68%;
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 15%;
-    --input: 0 0% 15%;
-    --ring: 252 67% 66%;
+    --border: 0 0% 89%;
+    --input: 0 0% 89%;
+    --ring: 258 90% 66%;
     --radius: 0.625rem;
   }
 }
@@ -68,16 +76,73 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: hsl(var(--muted));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #7e6ee3;
+  background: hsl(0 0% 78%);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #6b5ed1;
+  background: hsl(0 0% 66%);
+}
+
+/*
+ * The page's own texture: a faint dot grid, like a design canvas. It reads as
+ * paper rather than as a background image, and replaces the neon particle
+ * field the dark theme relied on.
+ */
+.canvas-grid {
+  background-image: radial-gradient(hsl(0 0% 80%) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* A heading word set apart — the reference leads each section with one. */
+.ink-accent {
+  color: hsl(var(--accent));
+}
+
+/*
+ * Cards sit on the page like objects placed on a desk: a hair of rotation and
+ * a soft shadow, straightening as you point at them.
+ */
+.paper-card {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  box-shadow: 0 1px 2px hsl(0 0% 0% / 0.04), 0 12px 28px -12px hsl(0 0% 0% / 0.14);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+}
+
+.paper-card:hover {
+  transform: translateY(-4px) rotate(0deg) !important;
+  box-shadow: 0 2px 4px hsl(0 0% 0% / 0.05), 0 22px 44px -16px hsl(0 0% 0% / 0.2);
+}
+
+/* Selection handles, borrowed from a design tool's canvas. */
+.canvas-frame {
+  position: relative;
+  outline: 1px solid hsl(var(--primary) / 0.55);
+}
+
+.canvas-frame::before,
+.canvas-frame::after {
+  content: "";
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--primary));
+}
+
+.canvas-frame::before {
+  top: -4px;
+  left: -4px;
+}
+
+.canvas-frame::after {
+  bottom: -4px;
+  right: -4px;
 }
 
 /* Custom animations */
@@ -277,18 +342,15 @@
 
 /* Glass effect */
 .glass {
-  background: rgba(22, 22, 22, 0.7);
+  background: hsl(var(--card) / 0.75);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid hsl(var(--border));
 }
 
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, #7e6ee3 0%, #3b82f6 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: hsl(var(--accent));
 }
 
 /* Noise texture overlay */
