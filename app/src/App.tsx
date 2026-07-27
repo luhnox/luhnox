@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from 'rea
 import './App.css';
 import Navigation from './sections/Navigation';
 import Hero from './sections/Hero';
+import { useSmoothScroll } from './hooks/useSmoothScroll';
 
 const About = lazy(() => import('./sections/About'));
 const Skills = lazy(() => import('./sections/Skills'));
@@ -75,6 +76,7 @@ const DeferredSection = ({
 
 function App() {
   const [scrollY, setScrollY] = useState(0);
+  useSmoothScroll();
   const [enhancementsReady, setEnhancementsReady] = useState(false);
   const mainRef = useRef<HTMLDivElement>(null);
 
