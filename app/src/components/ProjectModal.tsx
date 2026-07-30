@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { ArrowUpRight, Github, X } from 'lucide-react';
 import gsap from 'gsap';
-import { pauseSmoothScroll, resumeSmoothScroll } from '@/hooks/useSmoothScroll';
+import { OVERLAY_EASE, prefersReducedMotion, useOverlay } from '@/hooks/useOverlay';
 
 export interface ProjectDetail {
   id: number;
@@ -23,8 +23,6 @@ interface ProjectModalProps {
   onClose: () => void;
 }
 
-const EASE_OUT = 'power3.out';
-
 /**
  * The project detail view: an in-page overlay, not a route.
  *
@@ -44,25 +42,15 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
   const backdropRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
-  /** Whatever had focus before opening, so it can be handed back on close. */
-  const lastFocused = useRef<HTMLElement | null>(null);
 
   const isOpen = project !== null;
 
-  const reducedMotion = useCallback(
-    () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
-    []
-  );
+  // Scroll lock, Lenis pause, Escape, focus restore — shared with the
+  // certificate lightbox so the two cannot drift apart.
+  useOverlay(isOpen, onClose);
 
-  // ── Open: freeze the page, animate in, take focus ──────────────────────────
   useEffect(() => {
     if (!isOpen) return;
-
-    lastFocused.current = document.activeElement as HTMLElement | null;
-
-    pauseSmoothScroll();
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
 
     const backdrop = backdropRef.current;
     const panel = panelRef.current;
@@ -71,19 +59,14 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
     // that is always present, so Enter always does something predictable.
     closeRef.current?.focus();
 
-    if (reducedMotion() || !backdrop || !panel) {
-      return () => {
-        document.body.style.overflow = previousOverflow;
-        resumeSmoothScroll();
-      };
-    }
+    if (prefersReducedMotion() || !backdrop || !panel) return;
 
     const tl = gsap.timeline();
     tl.fromTo(backdrop, { opacity: 0 }, { opacity: 1, duration: 0.28, ease: 'power2.out' })
       .fromTo(
         panel,
         { opacity: 0, y: 28, scale: 0.97 },
-        { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: EASE_OUT },
+        { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: OVERLAY_EASE },
         '<0.04'
       )
       // The panel's own children come in after it, staggered, so the eye lands
@@ -92,36 +75,15 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
       .fromTo(
         panel.querySelectorAll('[data-modal-stagger]'),
         { opacity: 0, y: 16 },
-        { opacity: 1, y: 0, duration: 0.4, ease: EASE_OUT, stagger: 0.06 },
+        { opacity: 1, y: 0, duration: 0.4, ease: OVERLAY_EASE, stagger: 0.06 },
         '<0.12'
       );
 
+    // Braces on purpose: tl.kill() returns the Timeline, and an effect cleanup
+    // has to return void or undefined.
     return () => {
       tl.kill();
-      document.body.style.overflow = previousOverflow;
-      resumeSmoothScroll();
     };
-  }, [isOpen, reducedMotion]);
-
-  // ── Escape to close ────────────────────────────────────────────────────────
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        event.preventDefault();
-        onClose();
-      }
-    };
-
-    window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
-  }, [isOpen, onClose]);
-
-  // ── Hand focus back where it came from ─────────────────────────────────────
-  useEffect(() => {
-    if (isOpen) return;
-    lastFocused.current?.focus?.();
   }, [isOpen]);
 
   if (!project) return null;
