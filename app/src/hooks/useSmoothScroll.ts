@@ -10,6 +10,24 @@ import Lenis from 'lenis';
  * Honours prefers-reduced-motion by simply not starting: the browser's native
  * scrolling is the correct behaviour for anyone who asked for less animation.
  */
+/**
+ * The live instance, module-scoped so an overlay can freeze the page behind it.
+ *
+ * Without this, Lenis keeps driving the page while a modal is open: the wheel
+ * scrolls the section underneath instead of the dialog, and `overflow: hidden`
+ * on <body> does not stop it, because Lenis animates scroll position itself
+ * rather than leaving it to the browser.
+ */
+let activeLenis: Lenis | null = null;
+
+export function pauseSmoothScroll() {
+  activeLenis?.stop();
+}
+
+export function resumeSmoothScroll() {
+  activeLenis?.start();
+}
+
 export function useSmoothScroll() {
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -24,6 +42,8 @@ export function useSmoothScroll() {
       // the platform rather than helping.
       syncTouch: false,
     });
+
+    activeLenis = lenis;
 
     let frame = 0;
     const raf = (time: number) => {
@@ -53,6 +73,7 @@ export function useSmoothScroll() {
       document.removeEventListener('click', handleAnchor);
       cancelAnimationFrame(frame);
       lenis.destroy();
+      if (activeLenis === lenis) activeLenis = null;
     };
   }, []);
 }

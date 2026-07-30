@@ -1,18 +1,52 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, Github } from 'lucide-react';
 import SelectionHeading from '@/components/SelectionHeading';
+import ProjectModal, { type ProjectDetail } from '@/components/ProjectModal';
 
-interface Project {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-  tags: string[];
-  githubUrl: string;
-  demoUrl?: string;
-}
+type Project = ProjectDetail;
 
 const PROJECTS: Project[] = [
+  {
+    id: 6,
+    title: 'GTPS Host',
+    description:
+      'A hosting platform and control panel for Growtopia private servers: a public site, a per-server dashboard for clients, and a super-admin panel.',
+    image: '/gtps-host.png',
+    tags: ['Next.js 16', 'React 19', 'TypeScript', 'Tailwind v4', 'SQLite', 'Lua'],
+    githubUrl: 'https://github.com/lohanlohan/Website-Bridge',
+    demoUrl: 'https://gtps.host',
+    overview: [
+      'Each customer gets a dashboard scoped to their own server, covering worlds, players, items, roles, store, weather, logs and metrics — around 26 sections in all, plus a super-admin panel that stays workable past 300 servers.',
+      'Two parts are more than CRUD: an in-browser Lua editor built on CodeMirror that validates syntax with luaparse before a script can be saved, and a drag-and-drop world planner and sprite editor built on dnd-kit. Every newly provisioned server also ships with a default Lua template baked into a master data file.',
+    ],
+    facts: [
+      { label: 'Role', value: 'Full-stack — platform, dashboard, Lua tooling' },
+      { label: 'Stack', value: 'Next.js App Router, better-sqlite3, CodeMirror, dnd-kit' },
+      { label: 'Hosting', value: 'Self-hosted VPS — PM2, Nginx, Certbot' },
+      { label: 'Scale', value: 'Admin tooling tuned for 300+ servers' },
+    ],
+  },
+  {
+    id: 7,
+    title: 'GrowLore',
+    description:
+      'A Growtopia toolkit in two halves that share one database: a free public calculator site, and a paid Discord bot for people running levelling services.',
+    image: '/growlore.png',
+    tags: ['React 19', 'TypeScript', 'Vite 7', 'discord.js', 'MySQL', 'Vercel'],
+    githubUrl: 'https://github.com/luhnox/GrowLore',
+    demoUrl: 'https://growlore.site',
+    overview: [
+      'The public side is roughly fifteen calculators and simulators — levels, guilds, vending, lock conversion — free and account-free, prerendered for SEO via an SSR build step.',
+      'The paid side is a Discord bot for level-selling businesses: a dashboard-defined pricelist, quoting that picks the best pack combination, screenshot uploads that read level and XP automatically, per-channel sales reports with refunds and profit, ticket panels with transcripts readable on the site, and a live boost queue.',
+      'Three domains — marketing, dashboard and API — run from a single Vercel serverless function, a constraint the routing was designed around rather than scaled past.',
+    ],
+    facts: [
+      { label: 'Role', value: 'Full-stack — site, dashboard, Discord bot' },
+      { label: 'Stack', value: 'Vite + React, Express, MySQL, @napi-rs/canvas' },
+      { label: 'Hosting', value: 'Vercel (web) + Pterodactyl (bot)' },
+      { label: 'Model', value: 'Site free; bot $0.50 per server per week' },
+    ],
+  },
   {
     id: 1,
     title: 'Portfolio Website',
@@ -66,16 +100,26 @@ const PROJECTS: Project[] = [
  * and no two share a baseline, so the eye travels down instead of scanning
  * rows. Fixed per index rather than random, so it is the same on every render.
  */
+/**
+ * ⚠️ KEEP THIS LENGTH EVEN. The offsets alternate mt-0 / mt-24 to drop the right
+ * column below the left one, and the list is cycled with `% length`. At an ODD
+ * length the cycle restarts on the wrong foot — index 4 (mt-0) would be
+ * followed by index 5 wrapping to mt-0 as well, putting two flush cards in the
+ * same grid row and flattening the stagger exactly there. Six entries keeps
+ * every row reading left-flush / right-dropped no matter how many projects ship.
+ */
 const CARD_PLACEMENT = [
   { rotate: '-1.6deg', offset: 'md:mt-0' },
   { rotate: '1.4deg', offset: 'md:mt-24' },
   { rotate: '1.1deg', offset: 'md:mt-0' },
   { rotate: '-1.3deg', offset: 'md:mt-24' },
   { rotate: '-0.9deg', offset: 'md:mt-0' },
+  { rotate: '1.5deg', offset: 'md:mt-24' },
 ];
 
 const Projects = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [openProject, setOpenProject] = useState<Project | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -111,12 +155,17 @@ const Projects = () => {
             const placement = CARD_PLACEMENT[index % CARD_PLACEMENT.length];
 
             return (
-              <a
+              // A button, not a link: this opens the detail overlay in place
+              // rather than leaving the page, and an <a> that never navigates
+              // lies to the browser — middle-click and "open in new tab" would
+              // both promise something it does not do. The real destinations
+              // live on the buttons inside the overlay.
+              <button
                 key={project.id}
-                href={project.demoUrl || project.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`group block transition-all duration-700 ${placement.offset} ${
+                type="button"
+                onClick={() => setOpenProject(project)}
+                aria-haspopup="dialog"
+                className={`group block w-full text-left transition-all duration-700 ${placement.offset} ${
                   isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
                 }`}
                 style={{ transitionDelay: `${index * 0.1}s` }}
@@ -130,7 +179,7 @@ const Projects = () => {
                     alt={project.title}
                     loading="lazy"
                     decoding="async"
-                    className="aspect-[4/3] w-full rounded-lg object-cover"
+                    className="aspect-[4/3] w-full rounded-lg object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                   />
                 </div>
 
@@ -151,7 +200,7 @@ const Projects = () => {
                     <span key={tag}>{tag}</span>
                   ))}
                 </div>
-              </a>
+              </button>
             );
           })}
         </div>
@@ -168,6 +217,8 @@ const Projects = () => {
           </a>
         </div>
       </div>
+
+      <ProjectModal project={openProject} onClose={() => setOpenProject(null)} />
     </section>
   );
 };

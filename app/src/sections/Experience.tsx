@@ -130,8 +130,13 @@ const Experience = () => {
                   }`}
                   style={{ transitionDelay: `${index * 0.12}s` }}
                 >
+                  {/* Ink here is pinned dark rather than following --foreground.
+                      The tints stay pastel in both themes (they are the section's
+                      only colour), so a foreground that flips to near-white on
+                      the dark theme would put white digits on pale yellow and
+                      erase them. */}
                   <span
-                    className={`flex h-[68px] w-[68px] shrink-0 items-center justify-center rounded-2xl text-xl font-extrabold text-foreground ${
+                    className={`flex h-[68px] w-[68px] shrink-0 items-center justify-center rounded-2xl text-xl font-extrabold text-[#1a1a1a] ${
                       NUMBER_TINTS[index % NUMBER_TINTS.length]
                     }`}
                   >

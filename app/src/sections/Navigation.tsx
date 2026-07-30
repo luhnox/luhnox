@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
+import ThemeToggle from '@/components/ThemeToggle';
 
 interface NavigationProps {
   scrollY: number;
@@ -68,15 +69,22 @@ const Navigation = ({ scrollY }: NavigationProps) => {
                 {link.name}
               </a>
             ))}
+            <ThemeToggle />
           </div>
 
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="rounded-full p-2 text-foreground transition-colors hover:bg-muted md:hidden"
-            aria-label={isOpen ? 'Close menu' : 'Open menu'}
-          >
-            {isOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+          {/* Mobile keeps the theme switch OUTSIDE the collapsible menu: changing
+              the look is a one-tap setting, not a destination, and burying it
+              behind the hamburger would mean opening a menu to close it again. */}
+          <div className="flex items-center gap-1 md:hidden">
+            <ThemeToggle />
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="rounded-full p-2 text-foreground transition-colors hover:bg-muted"
+              aria-label={isOpen ? 'Close menu' : 'Open menu'}
+            >
+              {isOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
         </div>
       </nav>
 
