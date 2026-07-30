@@ -174,9 +174,7 @@ const Certificates = () => {
             isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
           }`}
         >
-          <span className="hidden shrink-0 text-4xl md:block" aria-hidden="true">
-            🏅
-          </span>
+          <Award className="hidden shrink-0 text-accent md:block" size={36} aria-hidden="true" />
           <SelectionHeading label="Certifications">
             <h2 className="max-w-2xl text-3xl font-extrabold leading-tight tracking-[-0.02em] md:text-[2.6rem]">
               Paper that says I turned up.

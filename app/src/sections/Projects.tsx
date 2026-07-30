@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, Github } from 'lucide-react';
+import { ArrowRight, Github, Lightbulb } from 'lucide-react';
 import SelectionHeading from '@/components/SelectionHeading';
 import ProjectModal, { type ProjectDetail } from '@/components/ProjectModal';
 
@@ -140,9 +140,7 @@ const Projects = () => {
             isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
           }`}
         >
-          <span className="hidden shrink-0 text-4xl md:block" aria-hidden="true">
-            💡
-          </span>
+          <Lightbulb className="hidden shrink-0 text-accent md:block" size={36} aria-hidden="true" />
           <SelectionHeading label="Portfolio">
             <h2 className="max-w-2xl text-3xl font-extrabold leading-tight tracking-[-0.02em] md:text-[2.6rem]">
               Building small things, and finishing them.

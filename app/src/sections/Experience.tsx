@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ExternalLink, MapPin } from 'lucide-react';
+import { Crown, ExternalLink, MapPin } from 'lucide-react';
 
 interface ExperienceItem {
   id: number;
@@ -96,9 +96,7 @@ const Experience = () => {
                 isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
               }`}
             >
-              <span className="mb-3 block text-3xl" aria-hidden="true">
-                👑
-              </span>
+              <Crown className="mb-3 block text-accent" size={30} aria-hidden="true" />
               <h2 className="text-5xl font-extrabold leading-[0.95] tracking-[-0.03em] md:text-6xl">
                 Work
                 <br />
