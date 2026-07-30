@@ -127,7 +127,12 @@ function App() {
   }, []);
 
   return (
-    <div ref={mainRef} className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
+    // overflow-x-CLIP, not hidden. `overflow-x: hidden` forces overflow-y to
+    // `auto`, which makes this div a scroll container — and a sticky descendant
+    // then sticks to THIS box instead of the viewport. Since the box grows with
+    // its content it never scrolls, so the pinned hero below would silently do
+    // nothing. `clip` clips without creating a scroll container.
+    <div ref={mainRef} className="relative min-h-screen bg-background text-foreground overflow-x-clip">
       {/* Canvas backdrop */}
       {enhancementsReady && (
         <Suspense fallback={null}>
@@ -141,7 +146,20 @@ function App() {
       
       {/* Main Content */}
       <main className="relative z-10">
-        <Hero />
+        {/* The hero is pinned and everything after it rises over the top of it.
+            Two layers, so the stacking order is explicit rather than a
+            consequence of document order: the hero sits at z-0 and the rest of
+            the page at z-10.
+
+            Neither layer gets an opaque background on purpose — that would hide
+            the fixed dot-grid backdrop and its vignette for every section below
+            the fold. The hero is faded to nothing by GSAP before the incoming
+            content reaches it instead, so there is no bleed-through to cover. */}
+        <div className="relative z-0">
+          <Hero />
+        </div>
+
+        <div className="relative z-10">
         <DeferredSection fallbackMinHeight="28rem">
           <About />
         </DeferredSection>
@@ -160,6 +178,7 @@ function App() {
         <DeferredSection fallbackMinHeight="40rem">
           <Projects />
         </DeferredSection>
+        </div>
       </main>
       
       {/* Footer */}

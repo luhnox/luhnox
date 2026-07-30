@@ -132,6 +132,13 @@
   background-size: 24px 24px;
 }
 
+/* 80% grey dots read as faint texture on paper and as bright specks on near
+   black — same colour, opposite effect. The dark theme needs dots LIGHTER than
+   its background but nowhere near as light as the paper theme's. */
+.dark .canvas-grid {
+  background-image: radial-gradient(hsl(0 0% 26%) 1px, transparent 1px);
+}
+
 /* A heading word set apart — the reference leads each section with one. */
 .ink-accent {
   color: hsl(var(--accent));

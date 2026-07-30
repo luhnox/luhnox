@@ -67,6 +67,96 @@ const Hero = () => {
 
   useEffect(() => setIsLoaded(true), []);
 
+  const contentRef = useRef<HTMLDivElement>(null);
+  const hintRef = useRef<HTMLDivElement>(null);
+
+  /**
+   * The hero closes as you scroll off it: pinned in place while its contents
+   * sink, shrink and blur out, so the next section arrives over an empty stage
+   * rather than pushing a full screen of type up and out of frame.
+   *
+   * The pin is CSS (`sticky top-0`), not ScrollTrigger's own `pin`. Sticky needs
+   * no placeholder element and cannot fight Lenis over scroll position, which a
+   * pinned+scrubbed trigger sometimes does. GSAP is only asked to interpolate
+   * the fade, which is what `scrub` is genuinely good at.
+   *
+   * `end: '55%'` on purpose, well before the hero is fully scrolled past. The
+   * layers below carry no opaque background — that would hide the page's
+   * dot-grid backdrop — so the hero has to be at zero opacity BEFORE the
+   * incoming section overlaps it, or the two would be legible through each
+   * other for half a screen.
+   *
+   * ⚠️ GSAP IS LOADED DYNAMICALLY, AND HAS TO STAY THAT WAY. The hero is the one
+   *    section App.tsx does NOT lazy-load, because it is above the fold — so a
+   *    static `import gsap` here lands GSAP + ScrollTrigger in the entry chunk.
+   *    Measured: that took the main bundle from 217 kB to 333 kB, on a page whose
+   *    every other section is deferred precisely to avoid that. Importing inside
+   *    the effect keeps first paint unchanged and costs only that the fade starts
+   *    a moment late — invisible, since it does nothing until you scroll.
+   */
+  useEffect(() => {
+    const content = contentRef.current;
+    const section = heroRef.current;
+    if (!content || !section) return;
+
+    // Reduced motion gets the plain page: pinned, but no scrubbed fade.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    let cancelled = false;
+    let cleanup: (() => void) | null = null;
+
+    void (async () => {
+      const [{ default: gsap }, { ScrollTrigger }] = await Promise.all([
+        import('gsap'),
+        import('gsap/ScrollTrigger'),
+      ]);
+
+      // The effect can be torn down while those two are still in flight; without
+      // this the triggers would be created against an unmounted hero.
+      if (cancelled) return;
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      const animation = gsap.to(content, {
+        opacity: 0,
+        scale: 0.94,
+        y: -40,
+        filter: 'blur(6px)',
+        ease: 'none',
+        scrollTrigger: { trigger: section, start: 'top top', end: '55%', scrub: true },
+      });
+
+      // The "scroll to explore" prompt goes first and fast. It is an instruction
+      // that stops being true the moment it is followed, so it should not still
+      // be sitting there at half opacity a third of the way down the page.
+      const hint = hintRef.current;
+      const hintAnimation = hint
+        ? gsap.to(hint, {
+            opacity: 0,
+            y: 16,
+            ease: 'none',
+            scrollTrigger: { trigger: section, start: 'top top', end: '18%', scrub: true },
+          })
+        : null;
+
+      cleanup = () => {
+        animation.scrollTrigger?.kill();
+        animation.kill();
+        hintAnimation?.scrollTrigger?.kill();
+        hintAnimation?.kill();
+        // The fade leaves inline transform/filter/opacity behind; clearing them
+        // matters because a hot reload would otherwise re-mount an invisible hero.
+        gsap.set(content, { clearProps: 'opacity,scale,y,filter' });
+        if (hint) gsap.set(hint, { clearProps: 'opacity,y' });
+      };
+    })();
+
+    return () => {
+      cancelled = true;
+      cleanup?.();
+    };
+  }, []);
+
   const scrollToAbout = () => {
     document.querySelector('#about')?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -77,12 +167,14 @@ const Hero = () => {
   });
 
   return (
+    // h-screen, not min-h-screen: a sticky box has to have a known height for
+    // `top-0` to mean anything, and the hero's content already fits one screen.
     <section
       id="home"
       ref={heroRef}
-      className="relative min-h-screen flex items-center px-6 py-24 overflow-hidden"
+      className="sticky top-0 flex h-screen items-center overflow-hidden px-6"
     >
-      <div className="container mx-auto max-w-5xl">
+      <div ref={contentRef} className="container mx-auto max-w-5xl">
         <div {...reveal('0.1s')}>
           <p className="font-mono text-xs tracking-[0.3em] uppercase text-muted-foreground mb-8">
             Hello, I&apos;m
@@ -166,6 +258,7 @@ const Hero = () => {
       </div>
 
       <div
+        ref={hintRef}
         className={`absolute bottom-10 left-1/2 -translate-x-1/2 transition-opacity duration-700 ${
           isLoaded ? 'opacity-100' : 'opacity-0'
         }`}
