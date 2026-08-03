@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, Github, Lightbulb } from 'lucide-react';
 import SelectionHeading from '@/components/SelectionHeading';
 import ProjectModal, { type ProjectDetail } from '@/components/ProjectModal';
+import Doodle from '@/components/Doodle';
 
 type Project = ProjectDetail;
 
@@ -142,8 +143,17 @@ const Projects = () => {
         >
           <Lightbulb className="hidden shrink-0 text-accent md:block" size={36} aria-hidden="true" />
           <SelectionHeading label="Portfolio">
-            <h2 className="max-w-2xl text-3xl font-extrabold leading-tight tracking-[-0.02em] md:text-[2.6rem]">
+            <h2 className="relative max-w-2xl text-3xl font-extrabold leading-tight tracking-[-0.02em] md:text-[2.6rem]">
               Building small things, and finishing them.
+              {/* Circled the way somebody marks the line they meant. It only draws
+                  once the heading is actually on screen, which is the whole point
+                  of the mark — it should look like it just happened. */}
+              <Doodle
+                name="circle"
+                delay={400}
+                drift={10}
+                className="absolute -right-6 -top-8 hidden h-24 w-24 text-primary md:block"
+              />
             </h2>
           </SelectionHeading>
         </div>

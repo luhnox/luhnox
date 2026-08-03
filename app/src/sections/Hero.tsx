@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowDown, Github, Instagram, Mail, Music2, Linkedin } from 'lucide-react';
 import { GITHUB_USERNAME, getGitHubHeaders, hasGitHubToken } from '@/lib/github';
+import Doodle from '@/components/Doodle';
 
 interface GitHubHeroProfile {
   created_at?: string;
@@ -184,8 +185,18 @@ const Hero = () => {
         {/* The name is the page's largest thing by a wide margin, with the
             portrait reduced to a mark beside it — the reference leads with
             type, not with a photograph. */}
+        {/* The marks are positioned against the name rather than the section, so
+            they travel with the type at every breakpoint instead of drifting off
+            it. `relative` on the heading is what they hang from. */}
         <div {...reveal('0.2s')}>
-          <h1 className="flex flex-wrap items-center gap-x-5 gap-y-2 text-6xl md:text-8xl font-extrabold tracking-[-0.04em] leading-[0.95]">
+          <h1 className="relative flex flex-wrap items-center gap-x-5 gap-y-2 text-6xl md:text-8xl font-extrabold tracking-[-0.04em] leading-[0.95]">
+            <Doodle
+              name="star"
+              fill="hsl(var(--primary) / 0.14)"
+              delay={700}
+              drift={7.5}
+              className="absolute -left-8 -top-9 h-12 w-12 text-primary md:-left-12 md:-top-12 md:h-16 md:w-16"
+            />
             <span>luhnox</span>
             <img
               src="/hero-profile-396.webp"
@@ -197,14 +208,28 @@ const Hero = () => {
               width={396}
               height={396}
             />
+            <Doodle
+              name="arrow"
+              delay={1100}
+              drift={8.5}
+              className="absolute -bottom-10 left-[7.5rem] hidden h-14 w-14 -scale-x-100 text-accent md:block md:left-[14rem]"
+            />
           </h1>
         </div>
 
         {/* Two halves of the same person, set in two different voices. */}
         <div {...reveal('0.3s')}>
-          <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-3">
-            <span className="canvas-frame px-4 py-1.5 font-serif italic text-3xl md:text-5xl text-foreground">
+          <div className="relative mt-6 flex flex-wrap items-center gap-x-4 gap-y-3">
+            <span className="canvas-frame relative px-4 py-1.5 font-serif italic text-3xl md:text-5xl text-foreground">
               Backend Developer
+              {/* Underneath the words rather than beside them: this is the one
+                  mark that annotates something, so it behaves like annotation. */}
+              <Doodle
+                name="underline"
+                delay={1500}
+                drift={9}
+                className="absolute -bottom-5 left-2 h-6 w-[85%] text-primary"
+              />
             </span>
             <span className="text-2xl md:text-3xl font-bold text-muted-foreground">&amp;</span>
             <span className="rounded-lg bg-foreground px-4 py-2 font-mono text-lg md:text-2xl font-bold text-background">

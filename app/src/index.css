@@ -346,6 +346,32 @@
   animation: float 6s ease-in-out infinite;
 }
 
+/**
+ * A hand-drawn mark never sits perfectly still.
+ *
+ * The travel is small on purpose — six pixels and a degree and a half. Enough that
+ * the page reads as alive, not enough to read as movement, which is the difference
+ * between a drawing that breathes and one that is being animated at you.
+ *
+ * Duration and delay are set per instance from Doodle.tsx, so a cluster of marks
+ * drifts out of phase instead of pulsing together like a heartbeat.
+ */
+@keyframes doodle-drift {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(1.5deg);
+  }
+}
+
+.animate-doodle-drift {
+  animation-name: doodle-drift;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
 .animate-pulse-glow {
   position: relative;
   isolation: isolate;
